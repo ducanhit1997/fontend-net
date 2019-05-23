@@ -19,8 +19,8 @@ class Nav extends Component {
             firstname_register: '',
             lastname_register: '',
             email: '',
-            isRegister: false
-
+            isRegister: false,
+            profile: {}
         };
     }
     Login = (e) => {
@@ -33,12 +33,11 @@ class Nav extends Component {
             password: password
         }).then(res => {
             let acc = res.data;
+            console.log(acc);
+            this.setState({profile: acc});
             const firstName = acc.firstName;
             const lastName = acc.lastName;
             const name = lastName + " " + firstName;
-
-            console.log(name);
-
             localStorage.setItem("name", name);
 
             this.setState({ isLogin: true })
@@ -147,6 +146,11 @@ class Nav extends Component {
                 showFormRegister: true,
             });
         }
+        if (e.key === 'profile') {
+            this.setState({
+                showProfile: true,
+            });
+        }
     }
     onCloseFormLogin = () => {
         this.setState({
@@ -168,10 +172,16 @@ class Nav extends Component {
             email: '',
         });
     };
+    onCloseProfile = () => {
+        this.setState({
+            showProfile: false,
+        });
+    };
     render() {
         const isLogin = localStorage.getItem("ACCESSTOKEN");
         const name = localStorage.getItem("name");
         //console.log(firstName);
+        const {profile} = this.state
         return (
             <div className="as">
                 <Menu
@@ -187,6 +197,9 @@ class Nav extends Component {
                     {
                         (isLogin) ?
                             <SubMenu title={<span className="submenu-title-wrapper" style={{ color: 'red' }}> Xin chào:  {(name)}<Icon type="caret-down" /></span>}>
+                                <Menu.Item title="Item 1" key="profile">
+                                    Xem thông tin
+                                </Menu.Item>
                                 <Menu.Item title="Item 1" key="logout">
                                     Đăng xuất
                                 </Menu.Item>
@@ -227,7 +240,7 @@ class Nav extends Component {
                         </div>
                         <div className="form-group1">
                             <div className="">
-                                <button type="submit" className="btn btn-default" onClick={this.onClick}>Submit</button>
+                                <button className="btn btn-default" onClick={this.onClick}>Submit</button>
                             </div>
                         </div>
                         <p style={{ color: 'red' }}>{this.state.loading}</p>
@@ -291,6 +304,20 @@ class Nav extends Component {
                         </div>
                         <p style={{ color: 'red' }}>{this.state.loading}</p>
                     </form>
+                </Drawer>
+                <Drawer
+                    title="Thông tin tài khoản"
+                    placement="right"
+                    closable={false}
+                    onClose={this.onCloseProfile}
+                    visible={this.state.showProfile}
+                    width={350}
+                >
+                    {/* {profile.firstName &&  */}
+                    <div>
+                       { profile.firstName}
+                    </div>
+                    {/* } */}
                 </Drawer>
             </div>
         );
