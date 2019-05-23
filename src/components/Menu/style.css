@@ -2,3 +2,21 @@
     justify-content: center;
     display: flex;
 }
+.as{
+    text-align: center;
+}
+.form-group{
+    margin-bottom: -3px !important;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.form-group1{
+    margin-left: -16px;
+    margin-top: 11px;
+}
+.ant-drawer-title {
+    text-align: center;
+}
+p{
+    margin-left: -17px;
+}
