@@ -19,8 +19,10 @@ class Nav extends Component {
             firstname_register: '',
             lastname_register: '',
             email: '',
-            isRegister: false,
-            profile: {}
+            firstName_update: '',
+            roleAdmin: false,
+            isRegister: false
+            
         };
     }
     Login = (e) => {
@@ -32,20 +34,36 @@ class Nav extends Component {
             username: username,
             password: password
         }).then(res => {
-            let acc = res.data;
-            console.log(acc);
-            this.setState({profile: acc});
+            const acc = res.data;
+            console.log(acc.role);
+            //this.setState({profile: acc});
             const firstName = acc.firstName;
             const lastName = acc.lastName;
+            const email = acc.email;
+            const role = acc.role;
+            //
+            console.log(role);
+
             const name = lastName + " " + firstName;
             localStorage.setItem("name", name);
-
+            localStorage.setItem("firstName", firstName);
+            localStorage.setItem("lastName", lastName);
+            localStorage.setItem("email", email);
+           
+           
             this.setState({ isLogin: true })
             //this.setState({username: '',password:'', loading:''});
 
             localStorage.setItem("ACCESSTOKEN", true);
             if (this.state.isLogin) {
                 message.success('Bạn đã đăng nhập thành công', 1);
+                if(role==='admin'){
+                    this.setState({roleAdmin: true})
+                    if(this.state.roleAdmin===true){
+                        const roleAdmin = true;
+                        localStorage.setItem("roleAdmin", roleAdmin);
+                    }
+                }
                 this.setState({ showFormLogin: false })
             }
         }).catch(e => {
@@ -137,7 +155,7 @@ class Nav extends Component {
             });
         }
         if (e.key === 'logout') {
-            this.setState({ user_id: '' });
+            this.setState({ user_id: '', roleAdmin: false });
             localStorage.clear();
             message.success('Bạn đã đăng xuất thành công', 1);
         }
@@ -170,6 +188,7 @@ class Nav extends Component {
             firstname_register: '',
             lastname_register: '',
             email: '',
+            role: ''
         });
     };
     onCloseProfile = () => {
@@ -180,8 +199,12 @@ class Nav extends Component {
     render() {
         const isLogin = localStorage.getItem("ACCESSTOKEN");
         const name = localStorage.getItem("name");
+        const firstName = localStorage.getItem("firstName");
+        const lastName = localStorage.getItem("lastName");
+        const email = localStorage.getItem("email");
+        const roleAdmin = localStorage.getItem("roleAdmin");
         //console.log(firstName);
-        const {profile} = this.state
+        
         return (
             <div className="as">
                 <Menu
@@ -194,6 +217,16 @@ class Nav extends Component {
                     <Menu.Item key="app">
                         <Link to="/about">Giới thiệu</Link>
                     </Menu.Item>
+                    {
+                        (roleAdmin)?
+                            <Menu.Item key="admin">
+                                <Link>Truy cập trang admin</Link>
+                            </Menu.Item>:
+                           <Menu.Item key="admsin" style={{listStyle:'none'}}>
+                          
+                       </Menu.Item>
+
+                    }     
                     {
                         (isLogin) ?
                             <SubMenu title={<span className="submenu-title-wrapper" style={{ color: 'red' }}> Xin chào:  {(name)}<Icon type="caret-down" /></span>}>
@@ -210,11 +243,13 @@ class Nav extends Component {
                     }
                     {
                         (isLogin) ?
-                            <li style={{ listStyle: 'none' }}></li> :
-                            <Menu.Item key="register">
+                        <li style={{ listStyle: 'none' }}></li> :
+                        <Menu.Item key="register">
                                 Đăng ký
                         </Menu.Item>
                     }
+                   
+                                               
                 </Menu>
                 <Drawer
                     title="Đăng nhập"
@@ -314,9 +349,34 @@ class Nav extends Component {
                     width={350}
                 >
                     {/* {profile.firstName &&  */}
-                    <div>
-                       { profile.firstName}
-                    </div>
+                    <form className="form-horizontal" onSubmit={this.Register}>
+                        <div className="form-group">
+                            <label className="control-label" htmlFor="email">Firstname:</label>
+                            <div>
+                                <input type="text" className="form-control" id="email" readOnly name="firstname_register" value={firstName} onChange={this.onChange} placeholder="Enter email" />
+                                
+                            </div>
+                        </div>
+                        <div className="form-group">
+                            <label className="control-label" htmlFor="email">Lastname:</label>
+                            <div>
+                                <input type="text" className="form-control" id="email" readOnly name="lastname_register" value={lastName} onChange={this.onChange} placeholder="Enter email" />
+                               
+                            </div>
+                        </div>
+                        <div className="form-group">
+                            <label className="control-label" htmlFor="email">Email:</label>
+                            <div>
+                                <input type="text" className="form-control" id="email" name="email" readOnly value={email} onChange={this.onChange} placeholder="Enter email" />
+                        
+                            </div>
+                        </div>
+                        <div className="form-group1">
+                            <div className="">
+                                <button type="submit" onClick={this.onCloseProfile} className="btn btn-default" >Đóng</button>
+                            </div>
+                        </div>
+                    </form>
                     {/* } */}
                 </Drawer>
             </div>

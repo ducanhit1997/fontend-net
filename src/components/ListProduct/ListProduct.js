@@ -5,6 +5,9 @@ class ListProduct extends Component {
         return (
             <div>
                 <Product/>
+                <Product/>
+                <Product/>
+                <Product/>
             </div>
         );
     }

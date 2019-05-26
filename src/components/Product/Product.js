@@ -12,7 +12,6 @@ class Product extends Component {
     }
     componentWillMount() {
         this.props.loadProduct()
-        console.log("will")
     }
     render() {
         console.log(this.props.products,"okokok");
