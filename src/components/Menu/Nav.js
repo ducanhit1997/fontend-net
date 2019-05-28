@@ -127,7 +127,7 @@ class Nav extends Component {
                         lastName: lastname_register,
                         email: email
                     }).then(res2 => {
-                        console.log(res2.data);
+                        console.log(res2);
                         this.setState({ isRegister: true });
                         if (this.state.isRegister) {
                             message.success('Bạn đã ký thành thành công', 1);
@@ -220,7 +220,7 @@ class Nav extends Component {
                     {
                         (roleAdmin)?
                             <Menu.Item key="admin">
-                                <Link>Truy cập trang admin</Link>
+                                <Link to="/admin">Truy cập trang admin</Link>
                             </Menu.Item>:
                            <Menu.Item key="admsin" style={{listStyle:'none'}}>
                           
@@ -243,7 +243,9 @@ class Nav extends Component {
                     }
                     {
                         (isLogin) ?
-                        <li style={{ listStyle: 'none' }}></li> :
+                        <Menu.Item key="admsin" style={{listStyle:'none'}}>
+                          
+                        </Menu.Item> :
                         <Menu.Item key="register">
                                 Đăng ký
                         </Menu.Item>

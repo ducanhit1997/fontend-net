@@ -3,7 +3,6 @@ import Slider1 from './images/slider1.jpg'
 import Slider2 from './images/slider2.jpg'
 import Slider3 from './images/slider3.jpg'
 import ListProduct from './../../components/ListProduct/ListProduct';
-import CategoryProduct from './../../components/CategoryProduct/CategoryProduct';
 class HomePage extends Component {
     render() {
         return (
@@ -37,9 +36,7 @@ class HomePage extends Component {
                         <span className="sr-only">Next</span>
                     </a>
                 </div>
-                <CategoryProduct/>
                 <ListProduct/>
-
             </div>
         );
     }
