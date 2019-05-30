@@ -16,17 +16,17 @@ export const act_LoadCustomer = (data) =>{
     }
 }
 
-export const act_LoadCustomerById_Request = (idCustomer) =>{
+export const act_FindCustomer_Request = (idCustomer) =>{
     return(dispatch) =>{
-        return apiCall(`users/${idCustomer}`,'GET',null).then(res =>{
-            console.log(res.data);
-            dispatch(act_LoadCustomerById(res.data));
+        return apiCall(`users/get/${idCustomer}`,'GET',null).then(res =>{
+            //console.log(res.data);
+            dispatch(act_FindCustomer(res.data));
         })
     }
 }
-export const act_LoadCustomerById = (data) =>{
+export const act_FindCustomer = (data) =>{
     return{
-        type: Types.LOAD_CUSTOMER,
+        type: Types.FIND_CUSTOMER,
         data
     }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Card, Radio } from 'antd';
+import { Card, Radio, Button } from 'antd';
 import { act_LoadProduct_Request, act_LoadProductById_Request } from '.././../redux/product/action';
 import './style.css';
 const { Meta } = Card;
@@ -58,12 +58,14 @@ class Product extends Component {
                 {this.props.products.map(product =>
                     <div>
                         <div className="col-sm-6 col-md-3 col-xs-12" style={{ borderColor: '1px solid red', marginTop: '20px' }}>
+                            <span style={{backgroundColor:'red'}}>{product.pizzaCategory}</span>
                             <Card
                                 hoverable
                                 style={{ width: 240 }}
-                                cover={<img alt="example" src={product.image} style={{ width: '238px', height: '136px' }} />}
+                                cover={<img alt="example" src={product.image} style={{ width: '200px', height: '136px', margin: '5px 18px 0px 18px' }} />}
                             >
                                 <Meta title={product.name} description={product.description} />
+                                <div style={{textAlign:'center', marginTop:'10px'}}><Button type="primary">Add to cart</Button></div>
                             </Card>
                         </div>
                     </div>

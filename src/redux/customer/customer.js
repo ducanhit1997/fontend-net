@@ -2,8 +2,6 @@ import * as Types from './actionType';
 var list_CUSTOMER = [];
 const CUSTOMER = (state = list_CUSTOMER, action) => {
     switch (action.type) {
-        case Types.LOAD_CUSTOMER_BYID:
-            return action.data;  
         case Types.LOAD_CUSTOMER:
             return action.data;
         case Types.DELETE_CUSTOMER:

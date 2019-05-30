@@ -27,28 +27,30 @@ class Nav extends Component {
     }
     Login = (e) => {
         e.preventDefault();
-        //console.log(this.state);
-        this.setState({ loading: 'Đợi xíu, kiểm tra đã....' });
+        //Ưconsole.log(this.state);
+        this.setState({ loading: 'Please wait....' });
         var { username, password } = this.state;
         apiCall('login', 'POST', {
             username: username,
             password: password
         }).then(res => {
             const acc = res.data;
-            console.log(acc.role);
+            console.log(acc)
             //this.setState({profile: acc});
+            const token = acc.token;
             const firstName = acc.firstName;
             const lastName = acc.lastName;
             const email = acc.email;
             const role = acc.role;
             //
-            console.log(role);
+            //console.log(role);
 
             const name = lastName + " " + firstName;
             localStorage.setItem("name", name);
             localStorage.setItem("firstName", firstName);
             localStorage.setItem("lastName", lastName);
             localStorage.setItem("email", email);
+            localStorage.setItem("token", token);
            
            
             this.setState({ isLogin: true })
@@ -56,7 +58,7 @@ class Nav extends Component {
 
             localStorage.setItem("ACCESSTOKEN", true);
             if (this.state.isLogin) {
-                message.success('Bạn đã đăng nhập thành công', 1);
+                message.success('Login successfully! :))', 2);
                 if(role==='admin'){
                     this.setState({roleAdmin: true})
                     if(this.state.roleAdmin===true){
@@ -67,7 +69,7 @@ class Nav extends Component {
                 this.setState({ showFormLogin: false })
             }
         }).catch(e => {
-            this.setState({ loading: 'Sai thông tin đăng nhập!' });
+            this.setState({ loading: 'Information is incorrect!!' });
         })
     }
     Register = (e) => {
@@ -157,7 +159,7 @@ class Nav extends Component {
         if (e.key === 'logout') {
             this.setState({ user_id: '', roleAdmin: false });
             localStorage.clear();
-            message.success('Bạn đã đăng xuất thành công', 1);
+            message.success('Logout successfully!', 1);
         }
         if (e.key === 'register') {
             this.setState({

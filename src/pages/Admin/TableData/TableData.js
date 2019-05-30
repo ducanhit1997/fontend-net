@@ -3,12 +3,13 @@ import { Icon, Drawer, Button, message } from 'antd';
 import apiCall from '../../../utils/apiCall';
 
 import { connect } from 'react-redux';
-import { act_LoadCustomer_Request } from '../../../redux/customer/action';
+import { act_LoadCustomer_Request, act_FindCustomer_Request } from '../../../redux/customer/action';
 
 
 class TableData extends Component {
     state = {
-        visible: false,
+        openFormUpdate: false,
+        openFormAddUser: false,
         username_register: '',
         password_register: '',
         repassword_register: '',
@@ -16,18 +17,33 @@ class TableData extends Component {
         lastname_register: '',
         email: '',
         isRegister: false,
-        loading: ''
+        loading: '',
+        // firstname_update: '',
+        // lastname_update: '',
+        // email_update: '',
+        isUpdate: false,
     };
 
     showFormAddUser = () => {
         this.setState({
-            visible: true,
+            openFormAddUser: true,
         });
     };
 
     onClose = () => {
         this.setState({
-            visible: false,
+            openFormAddUser: false,
+            openFormUpdate: false,
+            err_firstname_update: '',
+            err_lastname_update: '',
+            err_email_update: '',
+            err_username: '',
+            err_firstname: '',
+            err_lastname: '',
+            err_password: '',
+            err_repassword: '',
+            err_email: '',
+            loading: ''
         });
     };
 
@@ -102,17 +118,87 @@ class TableData extends Component {
             }
         })
     }
+    Update = (e) => {
+        e.preventDefault();
+        //console.log(this.state);
+        var { firstname_update, lastname_update, email_update, id_update } = this.state;
+        var error = true;
+        if (firstname_update === '') {
+            this.setState({ err_firstname_update: " Firstname can't be empty!" })
+            error = false;
+        } else {
+            this.setState({ err_firstname_update: '' })
+        }
+        if (lastname_update === '') {
+            this.setState({ err_lastname_update: "Lastname can't be empty!" })
+            error = false;
+        } else {
+            this.setState({ err_lastname_update: '' })
+        }
+        if (email_update === '') {
+            this.setState({ err_email_update: "Email can't be empty!" })
+            error = false;
+        } else {
+            this.setState({ err_email_update: '' })
+        }
+        // apiCall('users/checkemail', 'POST', {
+        //     email: email
+        // }).then(res => {
+        //     //console.log(res.data);
+        //     if (res.data === 'Email already') {
+        //         this.setState({ err_email: 'Email is exist!' })
+        //         error = false;
+        //     } else {
+        if (error) {
+            // console.log(this.state)
+            var token = 'Bearer ' + localStorage.getItem('token');
+            console.log(token);
+            this.setState({ loading: 'Please wait.......' });
+            apiCall('users/edit', 'POST', token,  {
+                id: id_update,
+                firstName: firstname_update,
+                lastName: lastname_update,
+                email: email_update
+            }).then(res2 => {
+                console.log(res2);
+                this.setState({ isUpdate: true });
+                if (this.state.isUpdate) {
+                    message.success('Update user suscessfully!', 1);
+                    // this.setState({ visible: false })
+                    // window.location.reload();
+                }
+            })
+        }
+        //     }
+        // })
+    }
+
+    componentDidMount() {
+        this.props.loadCustomer();
+    }
+    showFormEdit = (text) => {
+        //alert(text);
+        this.props.findCustomer(text)
+        this.setState({
+            openFormUpdate: true,
+        });
+    }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps && nextProps.itemCustomer) {
+            var { itemCustomer } = nextProps;
+            this.setState({
+                id_update: itemCustomer.user_id,
+                firstname_update: itemCustomer.firstName,
+                lastname_update: itemCustomer.lastName,
+                email_update: itemCustomer.email
+            })
+        }
+    }
     onChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         });
         //console.log(this.state);
-    }
-    selectCustomerId = () =>{
-        //alert("ok")
-    }
-    componentDidMount() {
-        this.props.loadCustomer();  
     }
     render() {
         return (
@@ -139,7 +225,7 @@ class TableData extends Component {
                                     <td>{customer.email}</td>
                                     <td>{customer.username}</td>
                                     <td>
-                                        <Button onClick={this.selectCustomerId}>
+                                        <Button onClick={() => { this.showFormEdit(customer.user_id) }}>
                                             <Icon type="edit" title="Update customer" />
                                         </Button>
                                     </td>
@@ -154,7 +240,7 @@ class TableData extends Component {
                     placement="right"
                     closable={false}
                     onClose={this.onClose}
-                    visible={this.state.visible}
+                    visible={this.state.openFormAddUser}
                     width={300}
                 >
                     <form className="form-horizontal" onSubmit={this.Register}>
@@ -208,18 +294,67 @@ class TableData extends Component {
                         <p style={{ color: 'red' }}>{this.state.loading}</p>
                     </form>
                 </Drawer>
+                <Drawer
+                    title="Update user"
+                    placement="right"
+                    closable={false}
+                    onClose={this.onClose}
+                    visible={this.state.openFormUpdate}
+                    width={300}
+                >
+                    <form className="form-horizontal" onSubmit={this.Update}>
+                        <div className="form-group">
+                            <label className="control-label" htmlFor="email">ID:</label>
+                            <div>
+                                <input type="text" className="form-control" id="email" readOnly name="id_update" value={this.state.id_update} onChange={this.onChange} placeholder="Enter email" />
+                            </div>
+                        </div>
+                        <div className="form-group">
+                            <label className="control-label" htmlFor="email">Firstname:</label>
+                            <div>
+                                <input type="text" className="form-control" id="email" name="firstname_update" value={this.state.firstname_update} onChange={this.onChange} placeholder="Enter email" />
+                                <div style={{ color: 'red' }}>{this.state.err_firstname_update}</div>
+                            </div>
+                        </div>
+                        <div className="form-group">
+                            <label className="control-label" htmlFor="email">Lastname:</label>
+                            <div>
+                                <input type="text" className="form-control" id="email" name="lastname_update" value={this.state.lastname_update} onChange={this.onChange} placeholder="Enter email" />
+                                <div style={{ color: 'red' }}>{this.state.err_lastname_update}</div>
+                            </div>
+                        </div>
+                        <div className="form-group">
+                            <label className="control-label" htmlFor="email">Email:</label>
+                            <div>
+                                <input type="text" className="form-control" id="email" name="email_update" value={this.state.email_update} onChange={this.onChange} placeholder="Enter email" />
+                                <div style={{ color: 'red' }}>{this.state.err_email_update}</div>
+                            </div>
+                        </div>
+                        <div className="form-group1">
+                            <div className="">
+                                <button type="submit" loading={this.state.iconLoading} className="btn btn-default" ><Icon type="edit" />Update</button>
+                            </div>
+                        </div>
+                        <p style={{ color: 'red' }}>{this.state.loading}</p>
+                    </form>
+                </Drawer>
             </div>
         );
     }
 }
 const mapStateToProps = (state) => {
+    //console.log(state.itemCustomer);
     return {
-        customers: state.customer
+        customers: state.customer,
+        itemCustomer: state.itemCustomer
     }
 }
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
+        findCustomer: (idCustomer) => {
+            dispatch(act_FindCustomer_Request(idCustomer))
+        },
         loadCustomer: () => {
             dispatch(act_LoadCustomer_Request())
         }
