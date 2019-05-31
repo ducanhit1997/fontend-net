@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import Product from '../Product/Product';
+import ProductContainer from '../../container/ProductContainer';
 class ListProduct extends Component {
     render() {
         return (
             <div>
-                <Product/>
+                <ProductContainer/>
             </div>
         );
     }

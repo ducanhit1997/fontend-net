@@ -16,7 +16,7 @@ export const act_LoadProduct = (data) =>{
     }
 }
 
-export const act_LoadProductById_Request = (idCategory) =>{
+export const act_LoadProductByCategory_Request = (idCategory) =>{
     return(dispatch) =>{
         // return apiCall('products/catalogy/1','GET',null).then(res =>{
         //     console.log(res.data);
@@ -24,11 +24,11 @@ export const act_LoadProductById_Request = (idCategory) =>{
         // })
         return apiCall(`products/catalogy/${idCategory}`,'GET',null).then(res =>{
             console.log(res.data);
-            dispatch(act_LoadProductById(res.data));
+            dispatch(act_LoadProductByCategory(res.data));
         })
     }
 }
-export const act_LoadProductById = (data) =>{
+export const act_LoadProductByCategory = (data) =>{
     return{
         type: Types.LOAD_PRODUCT_BYID,
         data

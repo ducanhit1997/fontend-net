@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Card, Radio, Button } from 'antd';
-import { act_LoadProduct_Request, act_LoadProductById_Request } from '.././../redux/product/action';
+//import { connect } from 'react-redux';
+import { Card, Button } from 'antd';
+import Cart from './../../components/Cart/Cart';
 import './style.css';
 const { Meta } = Card;
 class Product extends Component {
@@ -16,79 +16,32 @@ class Product extends Component {
             idCategory: '',
         }
     }
-    selectOption =(e) =>{
-       // var idCategory;
-        if(e.target.value === 'all'){
-            this.props.loadProduct();
-            //this.setState({idCategory: '1'});
-        }
-        if(e.target.value === 'mixed'){
-            //alert("Thap cam")
-            this.props.loadProductById(2);
-           // this.setState({idCategory: '2'});
-        }
-        if(e.target.value === 'seafood'){
-            //alert("Thap cam")
-            this.props.loadProductById(1);
-           // this.setState({idCategory: '2'});
-        }
-         if(e.target.value === 'traditional'){
-            //alert("Thap cam")
-            this.props.loadProductById(3);
-           // this.setState({idCategory: '2'});
-        }
-        
-    }
-    componentWillMount() {
-        this.props.loadProduct();
-    }
+    
     render() {
         return (
             <div>
-                <div className="category-product" style={{ paddingTop: '15px' }}>
-                    <div class="btn-group" style={{ justifyContent: 'center', display: 'flex' }}>
-                        <Radio.Group defaultValue="all" buttonStyle="solid" onChange={this.selectOption}>
-                            <Radio.Button value="all">Tất cả</Radio.Button>
-                            <Radio.Button value="traditional">Truyền thống</Radio.Button>
-                            <Radio.Button value="mixed">Thập cẩm</Radio.Button>
-                            <Radio.Button value="seafood">Hải sản</Radio.Button>
-                        </Radio.Group>
-                    </div>
-                </div>
                 {this.props.products.map(product =>
                     <div>
                         <div className="col-sm-6 col-md-3 col-xs-12" style={{ borderColor: '1px solid red', marginTop: '20px' }}>
-                            <span style={{backgroundColor:'red'}}>{product.pizzaCategory}</span>
+                            <span style={{ backgroundColor: 'red' }}>{product.pizzaCategory}</span>
                             <Card
                                 hoverable
                                 style={{ width: 240 }}
                                 cover={<img alt="example" src={product.image} style={{ width: '200px', height: '136px', margin: '5px 18px 0px 18px' }} />}
                             >
                                 <Meta title={product.name} description={product.description} />
-                                <div style={{textAlign:'center', marginTop:'10px'}}><Button type="primary">Add to cart</Button></div>
+                                <div style={{ textAlign: 'center', marginTop: '10px' }}><Button type="primary" onClick={() => this.addToCart(product)}>Add to cart</Button></div>
                             </Card>
                         </div>
                     </div>
                 )}
+                <div>
+                </div>
             </div>
         );
     }
-}
-const mapStateToProps = (state) => {
-    //console.log(state.product);
-    return {
-        products: state.product
+    addToCart = (product) => {
+        this.props.addToCart(product)
     }
 }
-
-const mapDispatchToProps = (dispatch, props) => {
-    return {
-        loadProduct: () => {
-            dispatch(act_LoadProduct_Request())
-        },
-        loadProductById: (idCategory) =>{
-            dispatch(act_LoadProductById_Request(idCategory))
-        }
-    }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(Product);    
+export default Product;    
