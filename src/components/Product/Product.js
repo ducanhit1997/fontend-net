@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 //import { connect } from 'react-redux';
-import { Card, Button } from 'antd';
-import Cart from './../../components/Cart/Cart';
+import { Card, Button, message } from 'antd';
 import './style.css';
 const { Meta } = Card;
 class Product extends Component {
@@ -16,8 +15,12 @@ class Product extends Component {
             idCategory: '',
         }
     }
-    
+    addProductToCard = (item, quanlity) => {
+        this.props.addProductToCard(item, quanlity)
+    }
     render() {
+        // const isLogin = localStorage.getItem("ACCESSTOKEN");
+        // console.log(isLogin);
         return (
             <div>
                 {this.props.products.map(product =>
@@ -30,6 +33,7 @@ class Product extends Component {
                                 cover={<img alt="example" src={product.image} style={{ width: '200px', height: '136px', margin: '5px 18px 0px 18px' }} />}
                             >
                                 <Meta title={product.name} description={product.description} />
+
                                 <div style={{ textAlign: 'center', marginTop: '10px' }}><Button type="primary" onClick={() => this.addToCart(product)}>Add to cart</Button></div>
                             </Card>
                         </div>
@@ -40,8 +44,20 @@ class Product extends Component {
             </div>
         );
     }
+    
     addToCart = (product) => {
-        this.props.addToCart(product)
+        //this.props.addToCart(product,1)
+        const isLogin = localStorage.getItem("ACCESSTOKEN");
+        console.log(isLogin);
+        if(isLogin){
+            this.props.addProductToCard(product, 1)
+            message.success('Bạn đã thêm một sản phẩm vào giỏ hàng', 2)
+        }
+        if(isLogin===null){
+            message.error('Vui lòng đăng nhập trước khi mua hàng', 2)
+
+        }
+
     }
 }
 export default Product;    

@@ -2,17 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Radio } from 'antd';
 import Cart from './../components/Cart/Cart';
-import CartItem from './../components/CartItem/CartItem';
-import * as Message from './../constants/Message';
 import { act_addToCart } from '../redux/cart/action';
 
 class CartContainer extends Component {
 
     render() {
-        var { cart } = this.props;
+        var { cart, addToCart } = this.props;
         return (
             <div>
-                <Cart cart={cart}>
+                <Cart cart={cart} addToCart ={addToCart}>
                     
                 </Cart>
                 {/* /<Product products={products} addToCart={addToCart}></Product> */}
@@ -21,11 +19,17 @@ class CartContainer extends Component {
     }
 }
 const mapStateToProps = (state) => {
-    console.log(state.cart);
+    //console.log(state.cart);
     return {
         cart: state.cart,
     }
 }
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        addToCart: (product) => {
+            dispatch(act_addToCart(product, 1))
+        }
+    }
+}
 
-
-export default connect(mapStateToProps, null)(CartContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(CartContainer);

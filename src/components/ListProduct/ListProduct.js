@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import ProductContainer from '../../container/ProductContainer';
 class ListProduct extends Component {
+    addProductToCard=(item, quanlity)=>{
+        this.props.addProductToCard(item, quanlity)
+    }
     render() {
         return (
             <div>
-                <ProductContainer/>
+                <ProductContainer  addProductToCard={this.addProductToCard}/>
             </div>
         );
     }

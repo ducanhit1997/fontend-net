@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './style.css';
 import apiCall from '../../utils/apiCall';
-import { Menu, Drawer, message, Icon } from 'antd';
+import { Menu, Drawer, message, Icon, Badge } from 'antd';
 const SubMenu = Menu.SubMenu;
 
 class Nav extends Component {
@@ -157,7 +157,7 @@ class Nav extends Component {
             });
         }
         if (e.key === 'logout') {
-            this.setState({ user_id: '', roleAdmin: false });
+            this.setState({ user_id: '', roleAdmin: false, data: [] });
             localStorage.clear();
             message.success('Logout successfully!', 1);
         }
@@ -198,6 +198,7 @@ class Nav extends Component {
             showProfile: false,
         });
     };
+  
     render() {
         const isLogin = localStorage.getItem("ACCESSTOKEN");
         const name = localStorage.getItem("name");
@@ -206,7 +207,7 @@ class Nav extends Component {
         const email = localStorage.getItem("email");
         const roleAdmin = localStorage.getItem("roleAdmin");
         //console.log(firstName);
-        
+        console.log("dta amenu", this.props.data)
         return (
             <div className="as">
                 <Menu
@@ -252,7 +253,22 @@ class Nav extends Component {
                                 Đăng ký
                         </Menu.Item>
                     }
-                   
+                     <Menu.Item key="appcart">
+                        {/* <Link to="/cart" >Gio hang ({this.props.data.length})</Link> */}
+                        {
+                            (isLogin) ?
+                         <Link to={{
+                            pathname: '/cart',
+                            state: {
+                                data: this.props.data,
+                            }
+                            }}>Giỏ hàng  <Badge count={this.props.data.lenght}>
+                            <Icon type="shopping-cart" />
+                          </Badge></Link>
+                            :
+                            <Link style={{}}></Link>
+                        }
+                    </Menu.Item>
                                                
                 </Menu>
                 <Drawer
@@ -288,7 +304,7 @@ class Nav extends Component {
                 <Drawer
                     title="Đăng ký"
                     placement="right"
-                    closable={false}
+                    closable={true}
                     onClose={this.onCloseFormRegister}
                     visible={this.state.showFormRegister}
                     width={350}
@@ -347,7 +363,7 @@ class Nav extends Component {
                 <Drawer
                     title="Thông tin tài khoản"
                     placement="right"
-                    closable={false}
+                    closable={true}
                     onClose={this.onCloseProfile}
                     visible={this.state.showProfile}
                     width={350}

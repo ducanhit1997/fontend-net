@@ -4,7 +4,11 @@ import Slider2 from './images/slider2.jpg'
 import Slider3 from './images/slider3.jpg'
 import ListProduct from './../../components/ListProduct/ListProduct';
 class HomePage extends Component {
+    addProductToCard=(item,quanlity)=>{
+        this.props.addProductToCard(item,quanlity)
+    }
     render() {
+        //console.log("data props", this.props.data)
         return (
             <div className="container">
                 <div id="myCarousel" className="carousel slide" data-ride="carousel">
@@ -36,7 +40,7 @@ class HomePage extends Component {
                         <span className="sr-only">Next</span>
                     </a>
                 </div>
-                <ListProduct/>
+                <ListProduct addProductToCard={this.addProductToCard}/>
             </div>
         );
     }

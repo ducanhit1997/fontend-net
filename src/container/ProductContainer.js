@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import {Link} from 'react-router-dom'
 import {Radio} from 'antd';
 import Product from './../components/Product/Product';
 import { act_LoadProduct_Request, act_LoadProductByCategory_Request } from '../redux/product/action';
-import { act_addToCart } from '../redux/cart/action';
-import CartItem from '../components/CartItem/CartItem';
-
+import {act_addToCart} from '../redux/cart/action';
 
 class ProductContainer extends Component {
     selectOption = (e) => {
@@ -26,8 +25,11 @@ class ProductContainer extends Component {
     componentWillMount() {
         this.props.loadProduct();
     }
+    addProductToCard=(item,quanlity)=>{
+        this.props.addProductToCard(item,quanlity)
+    }
     render() {
-        var { products, addToCart } = this.props;
+        var { products, cart} = this.props;
         return (
             <div>
                 <div className="category-product" style={{ paddingTop: '15px' }}>
@@ -40,7 +42,7 @@ class ProductContainer extends Component {
                         </Radio.Group>
                     </div>
                 </div>
-                <Product products={products} addToCart={addToCart}></Product>
+                <Product addProductToCard={this.addProductToCard} addToCart={this.cart} products={products}></Product>
             </div>
         );
     }
@@ -49,7 +51,7 @@ const mapStateToProps = (state) => {
     console.log(state.cart);
     return {
         products: state.product,
-        //cart: state.cart
+        cart: state.cart
     }
 }
 
