@@ -7,8 +7,11 @@ class HomePage extends Component {
     addProductToCard=(item,quanlity)=>{
         this.props.addProductToCard(item,quanlity)
     }
+   
     render() {
         //console.log("data props", this.props.data)
+        var {data} = this.props;
+        //console.log(data)
         return (
             <div className="container">
                 <div id="myCarousel" className="carousel slide" data-ride="carousel">
@@ -40,7 +43,7 @@ class HomePage extends Component {
                         <span className="sr-only">Next</span>
                     </a>
                 </div>
-                <ListProduct addProductToCard={this.addProductToCard}/>
+                <ListProduct data={data} addProductToCard={this.addProductToCard}/>
             </div>
         );
     }

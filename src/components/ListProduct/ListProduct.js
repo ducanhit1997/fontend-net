@@ -4,10 +4,12 @@ class ListProduct extends Component {
     addProductToCard=(item, quanlity)=>{
         this.props.addProductToCard(item, quanlity)
     }
+   
     render() {
+        var {data} = this.props;
         return (
             <div>
-                <ProductContainer  addProductToCard={this.addProductToCard}/>
+                <ProductContainer  data={data} addProductToCard={this.addProductToCard}/>
             </div>
         );
     }

@@ -207,7 +207,10 @@ class Nav extends Component {
         const email = localStorage.getItem("email");
         const roleAdmin = localStorage.getItem("roleAdmin");
         //console.log(firstName);
-        console.log("dta amenu", this.props.data)
+        //console.log("dta amenu", this.props.data)
+        var { data } = this.props;
+        const count =data.length
+        console.log(count);
         return (
             <div className="as">
                 <Menu
@@ -262,7 +265,7 @@ class Nav extends Component {
                             state: {
                                 data: this.props.data,
                             }
-                            }}>Giỏ hàng  <Badge count={this.props.data.lenght}>
+                            }}>Giỏ hàng  <Badge count={this.props.data.length}>
                             <Icon type="shopping-cart" />
                           </Badge></Link>
                             :

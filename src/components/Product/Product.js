@@ -18,15 +18,20 @@ class Product extends Component {
     addProductToCard = (item, quanlity) => {
         this.props.addProductToCard(item, quanlity)
     }
+    getCart =()=>{
+        this.props.data();
+    }
     render() {
         // const isLogin = localStorage.getItem("ACCESSTOKEN");
         // console.log(isLogin);
+        var { data } = this.props;
+        console.log(data);
         return (
             <div>
                 {this.props.products.map(product =>
                     <div>
                         <div className="col-sm-6 col-md-3 col-xs-12" style={{ borderColor: '1px solid red', marginTop: '20px' }}>
-                            <span style={{ backgroundColor: 'red' }}>{product.pizzaCategory}</span>
+                           
                             <Card
                                 hoverable
                                 style={{ width: 240 }}
@@ -48,7 +53,7 @@ class Product extends Component {
     addToCart = (product) => {
         //this.props.addToCart(product,1)
         const isLogin = localStorage.getItem("ACCESSTOKEN");
-        console.log(isLogin);
+        //console.log(isLogin);
         if(isLogin){
             this.props.addProductToCard(product, 1)
             message.success('Bạn đã thêm một sản phẩm vào giỏ hàng', 2)

@@ -1,7 +1,4 @@
 import * as Types from './actionTypes';
-import apiCall from './../../utils/apiCall';
-
-
 // export const act_addToCart_Request = (idProduct) =>{
 //     return(dispatch) =>{
 //         return apiCall(`products/get/${idProduct}`,'GET',null).then(res =>{

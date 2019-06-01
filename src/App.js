@@ -9,13 +9,10 @@ import Cart from './components/Cart/Cart';
 
 var data = JSON.parse(localStorage.getItem('CART'));
 var initialState = data? data : []
-
+console.log(initialState)
 class App extends Component {
-  // state={
-  //   cart: []
-  // }
+ 
   addProductToCard=(item,quanlity)=>{
-    //console.log("data recive",item)
    
     initialState.push({item, quanlity})
     
@@ -32,7 +29,7 @@ class App extends Component {
                 <Route
                   path='/'
                   exact
-                  render={(props) => <HomePage addProductToCard={this.addProductToCard} {...props} />}
+                  render={(props) => <HomePage  data={initialState} addProductToCard={this.addProductToCard} {...props} />}
                 />
                 <Route
                   path='/cart'
