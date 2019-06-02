@@ -39,7 +39,7 @@ class Product extends Component {
                             >
                                 <Meta title={product.name} description={product.description} />
 
-                                <div style={{ textAlign: 'center', marginTop: '10px' }}><Button type="primary" onClick={() => this.addToCart(product)}>Add to cart</Button></div>
+                                <div style={{ textAlign: 'center', marginTop: '10px' }}><Button type="primary" onClick={() => this.addToCart(product)}>Thêm vào giỏ hàng</Button></div>
                             </Card>
                         </div>
                     </div>

@@ -28,7 +28,7 @@ class Nav extends Component {
     Login = (e) => {
         e.preventDefault();
         //Ưconsole.log(this.state);
-        this.setState({ loading: 'Please wait....' });
+        this.setState({ loading: 'Vui lòng đợi....' });
         var { username, password } = this.state;
         apiCall('login', 'POST', {
             username: username,
@@ -51,14 +51,14 @@ class Nav extends Component {
             localStorage.setItem("lastName", lastName);
             localStorage.setItem("email", email);
             localStorage.setItem("token", token);
-           
+            localStorage.setItem("role", role)
            
             this.setState({ isLogin: true })
             //this.setState({username: '',password:'', loading:''});
 
             localStorage.setItem("ACCESSTOKEN", true);
             if (this.state.isLogin) {
-                message.success('Login successfully! :))', 2);
+                message.success('Đăng nhập thành công', 2);
                 if(role==='admin'){
                     this.setState({roleAdmin: true})
                     if(this.state.roleAdmin===true){
@@ -69,7 +69,7 @@ class Nav extends Component {
                 this.setState({ showFormLogin: false })
             }
         }).catch(e => {
-            this.setState({ loading: 'Information is incorrect!!' });
+            this.setState({ loading: 'Sai thông tin đăng nhập!!' });
         })
     }
     Register = (e) => {
@@ -286,19 +286,19 @@ class Nav extends Component {
                         <div className="form-group">
                             <label className="control-label" htmlFor="email">Username:</label>
                             <div>
-                                <input type="text" className="form-control" id="email" name="username" value={this.state.username} onChange={this.onChange} placeholder="Enter email" />
+                                <input type="text" className="form-control" id="email" name="username" value={this.state.username} onChange={this.onChange} placeholder="Nhập username của bạn" />
 
                             </div>
                         </div>
                         <div className="form-group">
                             <label className="control-label" htmlFor="pwd">Password:</label>
                             <div>
-                                <input type="password" className="form-control" id="pwd" name="password" value={this.state.password} onChange={this.onChange} placeholder="Enter password" />
+                                <input type="password" className="form-control" id="pwd" name="password" value={this.state.password} onChange={this.onChange} placeholder="Nhập mật khẩu của bạn" />
                             </div>
                         </div>
                         <div className="form-group1">
                             <div className="">
-                                <button className="btn btn-default" onClick={this.onClick}>Submit</button>
+                                <button className="btn btn-default" onClick={this.onClick}>Đăng nhập</button>
                             </div>
                         </div>
                         <p style={{ color: 'red' }}>{this.state.loading}</p>

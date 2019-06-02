@@ -6,7 +6,7 @@ import HomePage from './pages/HomePage/HomePage';
 import Admin from './pages/Admin/Admin';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import Cart from './components/Cart/Cart';
-
+import {routersUser, routersAdmin} from './routes';
 var data = JSON.parse(localStorage.getItem('CART'));
 var initialState = data? data : []
 console.log(initialState)
@@ -20,11 +20,14 @@ class App extends Component {
   }
   
   render() {
+    const ROLE = localStorage.getItem("roleAdmin")
+    //console.log(ROLE);
    // const {cart} = this.state
     return (
       <Router>
         <div>
               <Nav data={initialState}/>
+              {(ROLE)?
               <Switch>
                 <Route
                   path='/'
@@ -39,7 +42,22 @@ class App extends Component {
                 {/* <Route path="/cart" component={Cart}/> */}
                 <Route path="/admin" component={Admin}/>
                 <Route path="*" component={NotFoundPage}/>
-              </Switch>
+              </Switch>:
+               <Switch>
+               <Route
+                 path='/'
+                 exact
+                 render={(props) => <HomePage  data={initialState} addProductToCard={this.addProductToCard} {...props} />}
+               />
+               <Route
+                 path='/cart'
+                 render={(props) => <Cart {...props} data={initialState}/>}
+               />
+               {/* <Route path="/" exact component={HomePage} /> */}
+               {/* <Route path="/cart" component={Cart}/> */}
+               <Route path="*" component={NotFoundPage}/>
+             </Switch>
+              }
         </div>
       </Router>
     );
