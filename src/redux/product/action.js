@@ -1,4 +1,4 @@
-import * as Types from './actionTypes';
+import * as Types from './ActionTypes';
 import apiCall from './../../utils/apiCall';
 
 export const act_LoadProduct_Request = () =>{

@@ -1,4 +1,4 @@
-import * as Types from './actionTypes';
+import * as Types from './ActionTypes';
 var list_Product = [];
 const PRODUCT = (state = list_Product, action) => {
     switch (action.type) {

@@ -11,7 +11,7 @@ import {applyMiddleware} from 'redux';
 import "antd/dist/antd.css";
 const store = createStore(
     myReducer,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+    // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
     applyMiddleware(thunk)
     );
 
