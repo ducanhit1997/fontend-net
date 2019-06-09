@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './style.css';
 import apiCall from '../../utils/apiCall';
-import { Menu, Drawer, message, Icon, Badge } from 'antd';
+import { Menu, Drawer, message, Icon, Badge, Modal } from 'antd';
 const SubMenu = Menu.SubMenu;
 
 class Nav extends Component {
@@ -22,7 +22,7 @@ class Nav extends Component {
             firstName_update: '',
             roleAdmin: false,
             isRegister: false
-            
+
         };
     }
     Login = (e) => {
@@ -52,16 +52,16 @@ class Nav extends Component {
             localStorage.setItem("email", email);
             localStorage.setItem("token", token);
             localStorage.setItem("role", role)
-           
+
             this.setState({ isLogin: true })
             //this.setState({username: '',password:'', loading:''});
 
             localStorage.setItem("ACCESSTOKEN", true);
             if (this.state.isLogin) {
                 message.success('Đăng nhập thành công', 2);
-                if(role==='admin'){
-                    this.setState({roleAdmin: true})
-                    if(this.state.roleAdmin===true){
+                if (role === 'admin') {
+                    this.setState({ roleAdmin: true })
+                    if (this.state.roleAdmin === true) {
                         const roleAdmin = true;
                         localStorage.setItem("roleAdmin", roleAdmin);
                     }
@@ -133,7 +133,7 @@ class Nav extends Component {
                         this.setState({ isRegister: true });
                         if (this.state.isRegister) {
                             message.success('Bạn đã ký thành thành công', 1);
-                            
+
                             this.setState({ showFormRegister: false })
                         }
                     })
@@ -172,14 +172,27 @@ class Nav extends Component {
             });
         }
     }
-    onCloseFormLogin = () => {
+    handleOk = e => {
+        console.log(e);
         this.setState({
             showFormLogin: false,
-            loading: '',
-            username: '',
-            password: '',
         });
     };
+
+    handleCancel = e => {
+        console.log(e);
+        this.setState({
+            showFormLogin: false,
+        });
+    };
+    // onCloseFormLogin = () => {
+    //     this.setState({
+    //         showFormLogin: false,
+    //         loading: '',
+    //         username: '',
+    //         password: '',
+    //     });
+    // };
     onCloseFormRegister = () => {
         this.setState({
             showFormRegister: false,
@@ -198,7 +211,7 @@ class Nav extends Component {
             showProfile: false,
         });
     };
-  
+
     render() {
         const isLogin = localStorage.getItem("ACCESSTOKEN");
         const name = localStorage.getItem("name");
@@ -209,7 +222,7 @@ class Nav extends Component {
         //console.log(firstName);
         //console.log("dta amenu", this.props.data)
         var { data } = this.props;
-        const count =data.length
+        const count = data.length
         console.log(count);
         return (
             <div className="as">
@@ -224,15 +237,15 @@ class Nav extends Component {
                         <Link to="/about">Giới thiệu</Link>
                     </Menu.Item>
                     {
-                        (roleAdmin)?
+                        (roleAdmin) ?
                             <Menu.Item key="admin">
                                 <Link to="/admin">Truy cập trang admin</Link>
-                            </Menu.Item>:
-                           <Menu.Item key="admsin" style={{listStyle:'none'}}>
-                          
-                       </Menu.Item>
+                            </Menu.Item> :
+                            <Menu.Item key="admsin" style={{ listStyle: 'none' }}>
 
-                    }     
+                            </Menu.Item>
+
+                    }
                     {
                         (isLogin) ?
                             <SubMenu title={<span className="submenu-title-wrapper" style={{ color: 'red' }}> Xin chào:  {(name)}<Icon type="caret-down" /></span>}>
@@ -249,32 +262,32 @@ class Nav extends Component {
                     }
                     {
                         (isLogin) ?
-                        <Menu.Item key="admsin" style={{listStyle:'none'}}>
-                          
-                        </Menu.Item> :
-                        <Menu.Item key="register">
+                            <Menu.Item key="admsin" style={{ listStyle: 'none' }}>
+
+                            </Menu.Item> :
+                            <Menu.Item key="register">
                                 Đăng ký
                         </Menu.Item>
                     }
-                     <Menu.Item key="appcart">
+                    <Menu.Item key="appcart">
                         {/* <Link to="/cart" >Gio hang ({this.props.data.length})</Link> */}
                         {
                             (isLogin) ?
-                         <Link to={{
-                            pathname: '/cart',
-                            state: {
-                                data: this.props.data,
-                            }
-                            }}>Giỏ hàng  <Badge count={this.props.data.length}>
-                            <Icon type="shopping-cart" />
-                          </Badge></Link>
-                            :
-                            <Link style={{}}></Link>
+                                <Link to={{
+                                    pathname: '/cart',
+                                    state: {
+                                        data: this.props.data,
+                                    }
+                                }}>Giỏ hàng  <Badge count={this.props.data.length}>
+                                        <Icon type="shopping-cart" />
+                                    </Badge></Link>
+                                :
+                                <Link style={{}}></Link>
                         }
                     </Menu.Item>
-                                               
+
                 </Menu>
-                <Drawer
+                {/* <Drawer
                     title="Đăng nhập"
                     placement="right"
                     closable={true}
@@ -303,7 +316,38 @@ class Nav extends Component {
                         </div>
                         <p style={{ color: 'red' }}>{this.state.loading}</p>
                     </form>
-                </Drawer>
+                </Drawer> */}
+                <Modal
+                    title="LOGIN"
+                    visible={this.state.showFormLogin}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    width={800}
+                >   <div className="">
+                        <form className="form-horizontal" onSubmit={this.Login} id="FormLogin">
+                            <div className="form-group">
+                                <label className="control-label col-sm-3" htmlFor="email">Username:</label>
+                                <div className="col-sm-6">
+                                    <input type="text" className="form-control" id="email" name="username" value={this.state.username} onChange={this.onChange} placeholder="Nhập username của bạn" />
+
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label className="control-label" htmlFor="pwd">Password:</label>
+                                <div className="col-sm-6">
+                                    <input type="password" className="form-control" id="pwd" name="password" value={this.state.password} onChange={this.onChange} placeholder="Nhập mật khẩu của bạn" />
+                                </div>
+                            </div>
+                            <div className="form-group1">
+                                <div className="">
+                                    <button className="btn btn-default" onClick={this.onClick}>Đăng nhập</button>
+                                </div>
+                            </div>
+                            <p style={{ color: 'red' }}>{this.state.loading}</p>
+                        </form>
+                    </div>
+
+                </Modal>
                 <Drawer
                     title="Đăng ký"
                     placement="right"
@@ -316,7 +360,7 @@ class Nav extends Component {
                         <div className="form-group">
                             <label className="control-label" htmlFor="email">Tên đăng nhập:</label>
                             <div>
-                                <input type="text"  className="form-control" id="email" name="username_register" value={this.state.username_register} onChange={this.onChange} placeholder="Enter email" />
+                                <input type="text" className="form-control" id="email" name="username_register" value={this.state.username_register} onChange={this.onChange} placeholder="Enter email" />
                                 <div style={{ color: 'red' }}>{this.state.err_username}</div>
                             </div>
                         </div>
@@ -377,21 +421,21 @@ class Nav extends Component {
                             <label className="control-label" htmlFor="email">Firstname:</label>
                             <div>
                                 <input type="text" className="form-control" id="email" readOnly name="firstname_register" value={firstName} onChange={this.onChange} placeholder="Enter email" />
-                                
+
                             </div>
                         </div>
                         <div className="form-group">
                             <label className="control-label" htmlFor="email">Lastname:</label>
                             <div>
                                 <input type="text" className="form-control" id="email" readOnly name="lastname_register" value={lastName} onChange={this.onChange} placeholder="Enter email" />
-                               
+
                             </div>
                         </div>
                         <div className="form-group">
                             <label className="control-label" htmlFor="email">Email:</label>
                             <div>
                                 <input type="text" className="form-control" id="email" name="email" readOnly value={email} onChange={this.onChange} placeholder="Enter email" />
-                        
+
                             </div>
                         </div>
                         <div className="form-group1">

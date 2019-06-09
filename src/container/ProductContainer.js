@@ -30,7 +30,7 @@ class ProductContainer extends Component {
     }
     render() {
        
-        var { products, data} = this.props;
+        var { products, data, addToCart} = this.props;
         return (
             <div>
                 <div className="category-product" style={{ paddingTop: '15px' }}>
@@ -43,13 +43,13 @@ class ProductContainer extends Component {
                         </Radio.Group>
                     </div>
                 </div>
-                <Product addProductToCard={this.addProductToCard} data={data} addToCart={this.addToCart} products={products}></Product>
+                <Product addProductToCard={this.addProductToCard} data={data} addToCart={addToCart} products={products}></Product>
             </div>
         );
     }
 }
 const mapStateToProps = (state) => {
-    //console.log(state.cart);
+    console.log(state.cart);
     return {
         products: state.product,
         cart: state.cart

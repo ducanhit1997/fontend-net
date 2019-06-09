@@ -22,7 +22,7 @@ const mapStateToProps = (state) => {
     //console.log(state.cart);
     return {
         cart: state.cart,
-    }
+    } 
 }
 const mapDispatchToProps = (dispatch, props) => {
     return {
