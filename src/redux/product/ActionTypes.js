@@ -3,3 +3,5 @@ export const EDIT_PRODUCT= 'EDIT_PRODUCT';
 export const UPDATE_PRODUCT= 'UPDATE_PRODUCT';
 export const DELETE_PRODUCT= 'DELETE_PRODUCT';
 export const LOAD_PRODUCT_BYID= 'LOAD_PRODUCT_BYID';
+export const LOAD_PAGE= 'LOAD_PAGE';
+

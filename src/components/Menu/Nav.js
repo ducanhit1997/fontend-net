@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './style.css';
 import apiCall from '../../utils/apiCall';
-import { Menu, Drawer, message, Icon, Badge, Modal } from 'antd';
+import { Menu, notification, Icon, Badge, Modal, Button } from 'antd';
 import LoginForm from './login'
+import RegisterForm from './register'
 const SubMenu = Menu.SubMenu;
 
 class Nav extends Component {
@@ -59,7 +60,9 @@ class Nav extends Component {
 
             localStorage.setItem("ACCESSTOKEN", true);
             if (this.state.isLogin) {
-                message.success('Đăng nhập thành công', 2);
+                notification.success({
+                    message: 'Bạn đã đăng nhập thành công'
+                });
                 if (role === 'admin') {
                     this.setState({ roleAdmin: true })
                     if (this.state.roleAdmin === true) {
@@ -68,85 +71,43 @@ class Nav extends Component {
                     }
                 }
                 this.setState({ showFormLogin: false })
+                window.location.reload();
             }
         }).catch(e => {
             this.setState({ loading: 'Sai thông tin đăng nhập!!' });
         })
     }
-    Register = (e) => {
-        e.preventDefault();
-        console.log(this.state);
-        var { username_register, password_register, repassword_register, firstname_register, lastname_register, email } = this.state;
-        var error = true;
-        if (username_register === '') {
-            this.setState({ err_username: ' User name không được rỗng' })
-            error = false;
-        } else {
-            this.setState({ err_username: '' })
-        }
-        if (password_register === '') {
-            this.setState({ err_password: 'Password không được rỗng' })
-            error = false;
-        } else {
-            this.setState({ err_password: '' })
-        }
-        if (repassword_register !== password_register) {
-            this.setState({ err_repassword: 'Pass không trùng' })
-            error = false;
-        } else {
-            this.setState({ err_repassword: '' })
-        }
-        if (firstname_register === '') {
-            this.setState({ err_firstname: 'First name không được rỗng' })
-            error = false;
-        } else {
-            this.setState({ err_firstname: '' })
-        }
-        if (lastname_register === '') {
-            this.setState({ err_lastname: 'Last name không được rỗng' })
-            error = false;
-        } else {
-            this.setState({ err_lastname: '' })
-        }
-        if (email === '') {
-            this.setState({ err_email: 'Email không được rỗng' })
-            error = false;
-        } else {
-            this.setState({ err_email: '' })
-        }
-        apiCall('users/checkemail', 'POST', {
+    Register = (username, password, firstname, lastname, email) => {
+        apiCall('users/register', 'POST', {
+            username: username,
+            password: password,
+            firstName: firstname,
+            lastName: lastname,
             email: email
-        }).then(res => {
-            //console.log(res.data);
-            if (res.data === 'Email already') {
-                this.setState({ err_email: 'Email đã tồn tại trong hệ thống' })
-                error = false;
-            } else {
-                if (error) {
-                    apiCall('users/register', 'POST', {
-                        username: username_register,
-                        password: password_register,
-                        firstName: firstname_register,
-                        lastName: lastname_register,
-                        email: email
-                    }).then(res2 => {
-                        console.log(res2);
-                        this.setState({ isRegister: true });
-                        if (this.state.isRegister) {
-                            message.success('Bạn đã ký thành thành công', 1);
+        }).then(res2 => {
+            console.log(res2);
+            this.setState({ isRegister: true });
+            if (this.state.isRegister) {
+                notification.success({
+                    message: 'Bạn đã đăng ký thành công'
+                });
 
-                            this.setState({ showFormRegister: false })
-                        }
-                    })
-                }
+                this.setState({ showFormRegister: false })
             }
         })
     }
+    showFormRegister = () => {
+        console.log('registeer')
+        this.setState({
+            showFormRegister: !this.state.showFormRegister,
+            // showFormLogin: false
+        })
+    }
+  
     onChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         });
-        //console.log(this.state);
     }
     handleClick = (e) => {
         this.setState({
@@ -160,12 +121,10 @@ class Nav extends Component {
         if (e.key === 'logout') {
             this.setState({ user_id: '', roleAdmin: false, data: [] });
             localStorage.clear();
-            message.success('Logout successfully!', 1);
-        }
-        if (e.key === 'register') {
-            this.setState({
-                showFormRegister: true,
+            notification.success({
+                message: 'Bạn đã đăng xuất thành công'
             });
+            window.location.reload();
         }
         if (e.key === 'profile') {
             this.setState({
@@ -184,27 +143,6 @@ class Nav extends Component {
         console.log(e);
         this.setState({
             showFormLogin: false,
-        });
-    };
-    // onCloseFormLogin = () => {
-    //     this.setState({
-    //         showFormLogin: false,
-    //         loading: '',
-    //         username: '',
-    //         password: '',
-    //     });
-    // };
-    onCloseFormRegister = () => {
-        this.setState({
-            showFormRegister: false,
-            loading: '',
-            username_register: '',
-            password_register: '',
-            repassword_register: '',
-            firstname_register: '',
-            lastname_register: '',
-            email: '',
-            role: ''
         });
     };
     onCloseProfile = () => {
@@ -243,32 +181,18 @@ class Nav extends Component {
                                 <Link to="/admin">Truy cập trang admin</Link>
                             </Menu.Item> :
                             <Menu.Item key="admsin" style={{ listStyle: 'none' }}>
-
                             </Menu.Item>
-
                     }
                     {
                         (isLogin) ?
                             <SubMenu title={<span className="submenu-title-wrapper" style={{ color: 'red' }}> Xin chào:  {(name)}<Icon type="caret-down" /></span>}>
-                                <Menu.Item title="Item 1" key="profile">
-                                    Xem thông tin
-                                </Menu.Item>
-                                <Menu.Item title="Item 1" key="logout">
+                            <Menu.Item title="Item 1" key="logout">
                                     Đăng xuất
                                 </Menu.Item>
                             </SubMenu> :
                             <Menu.Item key="login">
-                                Đăng nhập
+                                <Button>Đăng nhập</Button>
                             </Menu.Item>
-                    }
-                    {
-                        (isLogin) ?
-                            <Menu.Item key="admsin" style={{ listStyle: 'none' }}>
-
-                            </Menu.Item> :
-                            <Menu.Item key="register">
-                                Đăng ký
-                        </Menu.Item>
                     }
                     <Menu.Item key="appcart">
                         {/* <Link to="/cart" >Gio hang ({this.props.data.length})</Link> */}
@@ -288,36 +212,6 @@ class Nav extends Component {
                     </Menu.Item>
 
                 </Menu>
-                {/* <Drawer
-                    title="Đăng nhập"
-                    placement="right"
-                    closable={true}
-                    onClose={this.onCloseFormLogin}
-                    visible={this.state.showFormLogin}
-                    width={300}
-                >
-                    <form className="form-horizontal" onSubmit={this.Login} id="FormLogin">
-                        <div className="form-group">
-                            <label className="control-label" htmlFor="email">Username:</label>
-                            <div>
-                                <input type="text" className="form-control" id="email" name="username" value={this.state.username} onChange={this.onChange} placeholder="Nhập username của bạn" />
-
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label className="control-label" htmlFor="pwd">Password:</label>
-                            <div>
-                                <input type="password" className="form-control" id="pwd" name="password" value={this.state.password} onChange={this.onChange} placeholder="Nhập mật khẩu của bạn" />
-                            </div>
-                        </div>
-                        <div className="form-group1">
-                            <div className="">
-                                <button className="btn btn-default" onClick={this.onClick}>Đăng nhập</button>
-                            </div>
-                        </div>
-                        <p style={{ color: 'red' }}>{this.state.loading}</p>
-                    </form>
-                </Drawer> */}
                 <Modal
                     // title="LOGIN"
                     centered={true}
@@ -326,13 +220,17 @@ class Nav extends Component {
                     visible={this.state.showFormLogin}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
-                    width={'67%'}
+                    width={'50%'}
                     height={'100%'}
                     footer={null}
-                >   
-                    <LoginForm loading={this.state.loading} onSubmitLogin={this.Login} />
+                >
+                    {this.state.showFormRegister ?
+                        <RegisterForm onSubmitRegister={this.Register} showFormLogin={this.showFormRegister} /> :
+                        <LoginForm loading={this.state.loading} onSubmitLogin={this.Login} showFormRegister={this.showFormRegister} />
+                    }
+
                 </Modal>
-                <Drawer
+                {/* <Drawer
                     title="Đăng ký"
                     placement="right"
                     closable={true}
@@ -390,46 +288,7 @@ class Nav extends Component {
                         </div>
                         <p style={{ color: 'red' }}>{this.state.loading}</p>
                     </form>
-                </Drawer>
-                <Drawer
-                    title="Thông tin tài khoản"
-                    placement="right"
-                    closable={true}
-                    onClose={this.onCloseProfile}
-                    visible={this.state.showProfile}
-                    width={350}
-                >
-                    {/* {profile.firstName &&  */}
-                    <form className="form-horizontal" onSubmit={this.Register}>
-                        <div className="form-group">
-                            <label className="control-label" htmlFor="email">Firstname:</label>
-                            <div>
-                                <input type="text" className="form-control" id="email" readOnly name="firstname_register" value={firstName} onChange={this.onChange} placeholder="Enter email" />
-
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label className="control-label" htmlFor="email">Lastname:</label>
-                            <div>
-                                <input type="text" className="form-control" id="email" readOnly name="lastname_register" value={lastName} onChange={this.onChange} placeholder="Enter email" />
-
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label className="control-label" htmlFor="email">Email:</label>
-                            <div>
-                                <input type="text" className="form-control" id="email" name="email" readOnly value={email} onChange={this.onChange} placeholder="Enter email" />
-
-                            </div>
-                        </div>
-                        <div className="form-group1">
-                            <div className="">
-                                <button type="submit" onClick={this.onCloseProfile} className="btn btn-default" >Đóng</button>
-                            </div>
-                        </div>
-                    </form>
-                    {/* } */}
-                </Drawer>
+                </Drawer> */}
             </div>
         );
     }

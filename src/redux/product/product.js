@@ -1,4 +1,4 @@
-import * as Types from './ActionTypes';
+import * as Types from './actionTypes';
 var list_Product = [];
 const PRODUCT = (state = list_Product, action) => {
     switch (action.type) {
@@ -12,7 +12,8 @@ const PRODUCT = (state = list_Product, action) => {
             return action.data;
         case Types.UPDATE_PRODUCT:
             return action.data; 
-            
+        case Types.LOAD_PAGE:
+            return action.data;  
         default: return state;
 
     }
