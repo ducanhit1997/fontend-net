@@ -9,7 +9,6 @@ class Cart extends Component {
             sum: 0
         };
     }
-
     componentDidMount() {
         let update = this.props.data
         let dataAfterUpdate = []
@@ -19,13 +18,14 @@ class Cart extends Component {
             objetTmp.item.money = parseInt(val.item.description)
             total += objetTmp.item.money;
             dataAfterUpdate.push(objetTmp)
+            //localStorage.setItem('CART', JSON.stringify(dataAfterUpdate));
         })
         this.setState({ data: dataAfterUpdate, sum: total })
     }
 
     onChange = (value, id) => {
         let update = this.state.data
-        console.log("data none update", this.state.data)
+        // console.log("data none update", this.state.data)
         let dataAfterUpdate = []
         var total = 0;
         update.map((val) => {
@@ -35,16 +35,30 @@ class Cart extends Component {
             }
             total += objetTmp.item.money;
             dataAfterUpdate.push(objetTmp)
+            //localStorage.setItem('CART', JSON.stringify(dataAfterUpdate));
         })
         this.setState({ data: dataAfterUpdate, sum: total })
 
         //console.log("date update", dataAfterUpdate)
     }
+    showMessDelete = (ind) => {
+        alert(ind)
+        // let update = this.state.data
+        // let dataAfterUpdate = []
+        // var total = 0;
+        // update.map((val) => {
+        //     let objetTmp = {...val, money: parseInt(val.item.description + "") }
+        //     if (objetTmp.item.id === id) {
+        //         update.splice(id+1);
+        //     }
+        //     total += objetTmp.item.money;
+        //     dataAfterUpdate.push(objetTmp)
+        //     //localStorage.setItem('CART', JSON.stringify(dataAfterUpdate));
+        // })
+        // this.setState({ data: dataAfterUpdate, sum: total })
+    }
     formatNumber = (num) => {
         return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-    }
-    showMessDelete = (text) =>{
-       this.state.data.splice(text,1);
     }
     render() {
         var { data } = this.state;
@@ -83,22 +97,24 @@ class Cart extends Component {
                                             <th scope="row">{this.formatNumber(item.item.description)} VND</th>
                                             <th scope="row">{this.formatNumber(item.item.money)} VND</th>
                                             <th>
-                                                <Button onClick={() => { this.showMessDelete(item.item.id) }}>
+                                                <Button onClick={(event) => { event.stopPropagation(); this.showMessDelete(ind) }}>
                                                     <Icon type="delete" title="Update customer" />
                                                 </Button>
                                             </th>
                                         </tr>
                                         //<p>{item.item.description} * {item.item.quanlity}</p>
                                     )
-
                                 }
                             </tbody>
                         </table>
+                        <div>
+                            <p style={{float:'right', fontWeight:'bold'}}>Tổng: {this.formatNumber(this.state.sum)} VND</p>
+                        </div>
                     </div>
-                    <div className="col-sm-4">
-                        {/* <p>Số lượng: {count}</p> */}
+                    {/* <div className="col-sm-4">
+                        
                         <p>Tổng giá: {this.formatNumber(this.state.sum)} VND</p>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         );

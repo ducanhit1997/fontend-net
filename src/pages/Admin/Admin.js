@@ -21,7 +21,7 @@ class Admin extends Component {
                     <Menu mode="inline" defaultSelectedKeys={['1']}>
                         <Menu.Item key="1">
                             <Icon type="user" />
-                            <span>User management</span>
+                            <span>Quản lý khách hàng</span>
                         </Menu.Item>
                         <Menu.Item key="2">
                             <Icon type="video-camera" />
