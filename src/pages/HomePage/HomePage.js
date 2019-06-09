@@ -4,7 +4,7 @@ import Slider2 from './images/slider2.jpg'
 import Slider3 from './images/slider3.jpg'
 import image from './images/ok.jpg'
 import ListProduct from './../../components/ListProduct/ListProduct';
-import { FacebookProvider, SendToMessenger } from 'react-facebook';
+// import { FacebookProvider, SendToMessenger } from 'react-facebook';
 
 class HomePage extends Component {
     addProductToCard = (item, quanlity) => {
@@ -56,9 +56,9 @@ class HomePage extends Component {
                     </a>
                 </div>
                 <ListProduct data={data} addProductToCard={this.addProductToCard} />
-                <FacebookProvider appId="123456789">
+                {/* <FacebookProvider appId="123456789">
                     <SendToMessenger messengerAppId="123456789" pageId="123456789" />
-                </FacebookProvider>
+                </FacebookProvider> */}
             </div>
         );
     }

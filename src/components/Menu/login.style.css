@@ -1,0 +1,72 @@
+.login__form--wrapper {
+
+    /* width: 1024px; */
+    height: 720px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+
+}
+
+.banner_left--wrapper {
+    width: 100%;
+    float: left;
+    height: 500px;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+
+}
+
+.form_login--wrapper {
+    
+    padding-top: 25%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.banner_right--wrapper {
+    width: 100%;
+    float: right;
+    height: 500px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+}
+
+.ant-modal-body {
+    padding: 0px !important;
+}
+
+.anticon {
+    color: #fafafa;
+    font-weight: 700;
+
+    
+}
+
+.anticon :hover{
+    background-color: green;
+}
+
+.login-form {
+    max-width: 300px;
+}
+
+.login-form-forgot {
+    float: right;
+}
+
+.login-form-button {
+    width: 100%;
+}
+
+.error_message {
+    color: green;
+
+}
+
+.block_error {
+    background-color: red;
+}

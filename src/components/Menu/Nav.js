@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './style.css';
 import apiCall from '../../utils/apiCall';
 import { Menu, Drawer, message, Icon, Badge, Modal } from 'antd';
+import LoginForm from './login'
 const SubMenu = Menu.SubMenu;
 
 class Nav extends Component {
@@ -25,11 +26,11 @@ class Nav extends Component {
 
         };
     }
-    Login = (e) => {
-        e.preventDefault();
+    Login = (username, password) => {
+        // e.preventDefault();
         //Ưconsole.log(this.state);
         this.setState({ loading: 'Vui lòng đợi....' });
-        var { username, password } = this.state;
+        // var { username, password } = this.state;
         apiCall('login', 'POST', {
             username: username,
             password: password
@@ -318,35 +319,18 @@ class Nav extends Component {
                     </form>
                 </Drawer> */}
                 <Modal
-                    title="LOGIN"
+                    // title="LOGIN"
+                    centered={true}
+                    style={{ top: 60 }}
+                    // visible={true}
                     visible={this.state.showFormLogin}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
-                    width={800}
-                >   <div className="">
-                        <form className="form-horizontal" onSubmit={this.Login} id="FormLogin">
-                            <div className="form-group">
-                                <label className="control-label col-sm-3" htmlFor="email">Username:</label>
-                                <div className="col-sm-6">
-                                    <input type="text" className="form-control" id="email" name="username" value={this.state.username} onChange={this.onChange} placeholder="Nhập username của bạn" />
-
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label className="control-label" htmlFor="pwd">Password:</label>
-                                <div className="col-sm-6">
-                                    <input type="password" className="form-control" id="pwd" name="password" value={this.state.password} onChange={this.onChange} placeholder="Nhập mật khẩu của bạn" />
-                                </div>
-                            </div>
-                            <div className="form-group1">
-                                <div className="">
-                                    <button className="btn btn-default" onClick={this.onClick}>Đăng nhập</button>
-                                </div>
-                            </div>
-                            <p style={{ color: 'red' }}>{this.state.loading}</p>
-                        </form>
-                    </div>
-
+                    width={'67%'}
+                    height={'100%'}
+                    footer={null}
+                >   
+                    <LoginForm loading={this.state.loading} onSubmitLogin={this.Login} />
                 </Modal>
                 <Drawer
                     title="Đăng ký"
