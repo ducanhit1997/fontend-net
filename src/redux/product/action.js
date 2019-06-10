@@ -4,7 +4,7 @@ import apiCall from './../../utils/apiCall';
 export const act_LoadProduct_Request = () =>{
     return(dispatch) =>{
         return apiCall('products','GET',null).then(res =>{
-            console.log(res.data);
+           // console.log(res.data);
             dispatch(act_LoadProduct(res.data));
         })
     }

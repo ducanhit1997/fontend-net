@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Icon, Drawer, Button, message } from 'antd';
 import apiCall from '../../../utils/apiCall';
-
+import FormAddCustomer from './formAddCustomer';
 import { connect } from 'react-redux';
 import { act_LoadCustomer_Request, act_FindCustomer_Request } from '../../../redux/customer/action';
 
@@ -10,18 +10,8 @@ class TableData extends Component {
     state = {
         openFormUpdate: false,
         openFormAddUser: false,
-        username_register: '',
-        password_register: '',
-        repassword_register: '',
-        firstname_register: '',
-        lastname_register: '',
-        email: '',
-        isRegister: false,
-        loading: '',
-        // firstname_update: '',
-        // lastname_update: '',
-        // email_update: '',
         isUpdate: false,
+        customers: []
     };
 
     showFormAddUser = () => {
@@ -47,80 +37,25 @@ class TableData extends Component {
         });
     };
 
-    Register = (e) => {
-        e.preventDefault();
-        //console.log(this.state);
-        var { username_register, password_register, repassword_register, firstname_register, lastname_register, email } = this.state;
-        var error = true;
-        if (username_register === '') {
-            this.setState({ err_username: " Username can't be empty!" })
-            error = false;
-        } else {
-            this.setState({ err_username: '' })
-        }
-        if (password_register === '') {
-            this.setState({ err_password: "Password can't be empty!" })
-            error = false;
-        } else {
-            this.setState({ err_password: '' })
-        }
-        if (repassword_register !== password_register) {
-            this.setState({ err_repassword: 'Password is valid!' })
-            error = false;
-        } else {
-            this.setState({ err_repassword: '' })
-        }
-        if (firstname_register === '') {
-            this.setState({ err_firstname: "Firstname can't be empty!" })
-            error = false;
-        } else {
-            this.setState({ err_firstname: '' })
-        }
-        if (lastname_register === '') {
-            this.setState({ err_lastname: "Last name can't be empty!" })
-            error = false;
-        } else {
-            this.setState({ err_lastname: '' })
-        }
-        if (email === '') {
-            this.setState({ err_email: "Email can't be empty!" })
-            error = false;
-        } else {
-            this.setState({ err_email: '' })
-        }
-        apiCall('users/checkemail', 'POST', {
-            email: email
+    Register = (values) => {
+        apiCall('users/register', 'POST', {
+            username: values.username,
+            password: values.password,
+            email: values.email,
+            firstName: values.firstName,
+            lastName: values.lastName,
         }).then(res => {
-            //console.log(res.data);
-            if (res.data === 'Email already') {
-                this.setState({ err_email: 'Email is exist!' })
-                error = false;
-            } else {
-                if (error) {
-                    this.setState({ loading: 'Please wait.......' });
-                    apiCall('users/register', 'POST', {
-                        username: username_register,
-                        password: password_register,
-                        firstName: firstname_register,
-                        lastName: lastname_register,
-                        email: email
-                    }).then(res2 => {
-                        console.log(res2);
-                        this.setState({ isRegister: true });
-                        if (this.state.isRegister) {
-                            message.success('Add user suscessfully!', 1);
-
-                            this.setState({ visible: false })
-                            window.location.reload();
-                        }
-                    })
-                }
+            var { customers } = this.state;
+            console.log(customers)
+            customers.push(values)
+            this.setState({ isRegister: true });
+            if (this.state.isRegister) {
+                message.success('Add user suscessfully!', 1);
+                this.setState({ visible: false })
             }
         })
     }
     Update = (e) => {
-        e.preventDefault();
-        //console.log(this.state);
         var { firstname_update, lastname_update, email_update, id_update } = this.state;
         var error = true;
         if (firstname_update === '') {
@@ -141,20 +76,11 @@ class TableData extends Component {
         } else {
             this.setState({ err_email_update: '' })
         }
-        // apiCall('users/checkemail', 'POST', {
-        //     email: email
-        // }).then(res => {
-        //     //console.log(res.data);
-        //     if (res.data === 'Email already') {
-        //         this.setState({ err_email: 'Email is exist!' })
-        //         error = false;
-        //     } else {
         if (error) {
-            // console.log(this.state)
             var token = 'Bearer ' + localStorage.getItem('token');
             console.log(token);
             this.setState({ loading: 'Please wait.......' });
-            apiCall('users/edit', 'POST', token,  {
+            apiCall('users/edit', 'POST', token, {
                 id: id_update,
                 firstName: firstname_update,
                 lastName: lastname_update,
@@ -164,15 +90,10 @@ class TableData extends Component {
                 this.setState({ isUpdate: true });
                 if (this.state.isUpdate) {
                     message.success('Update user suscessfully!', 1);
-                    // this.setState({ visible: false })
-                    // window.location.reload();
                 }
             })
         }
-        //     }
-        // })
     }
-
     componentDidMount() {
         this.props.loadCustomer();
     }
@@ -188,10 +109,18 @@ class TableData extends Component {
             var { itemCustomer } = nextProps;
             this.setState({
                 id_update: itemCustomer.user_id,
+                username_update: itemCustomer.username,
                 firstname_update: itemCustomer.firstName,
                 lastname_update: itemCustomer.lastName,
                 email_update: itemCustomer.email
             })
+        }
+        if(nextProps && nextProps.customers) {
+            var { customers } = nextProps;
+            this.setState({
+                customers: customers
+            })
+            this.props.loadCustomer();
         }
     }
     onChange = (e) => {
@@ -208,7 +137,7 @@ class TableData extends Component {
                     <table className="table">
                         <thead>
                             <tr>
-                                <th>User id</th>
+                                <th>STT</th>
                                 <th>First name</th>
                                 <th>Last name</th>
                                 <th>Email</th>
@@ -217,9 +146,9 @@ class TableData extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.props.customers.map(customer =>
+                            {this.state.customers.map((customer, index) => 
                                 <tr>
-                                    <td>{customer.user_id}</td>
+                                    <td>{index + 1}</td>
                                     <td>{customer.firstName}</td>
                                     <td>{customer.lastName}</td>
                                     <td>{customer.email}</td>
@@ -230,7 +159,8 @@ class TableData extends Component {
                                         </Button>
                                     </td>
                                 </tr>
-                            )}
+                            )
+                            }
                         </tbody>
                     </table>
 
@@ -241,58 +171,9 @@ class TableData extends Component {
                     closable={false}
                     onClose={this.onClose}
                     visible={this.state.openFormAddUser}
-                    width={300}
+                    width={350}
                 >
-                    <form className="form-horizontal" onSubmit={this.Register}>
-                        <div className="form-group">
-                            <label className="control-label" htmlFor="email">Username:</label>
-                            <div>
-                                <input type="text" className="form-control" id="email" name="username_register" value={this.state.username_register} onChange={this.onChange} placeholder="Enter email" />
-                                <div style={{ color: 'red' }}>{this.state.err_username}</div>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label className="control-label" htmlFor="pwd">Password:</label>
-                            <div>
-                                <input type="password" className="form-control" id="pwd" name="password_register" value={this.state.password_register} onChange={this.onChange} placeholder="Enter password" />
-                                <div style={{ color: 'red' }}>{this.state.err_password}</div>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label className="control-label" htmlFor="pwd">Re-password:</label>
-                            <div>
-                                <input type="password" className="form-control" id="pwd" name="repassword_register" value={this.state.repassword_register} onChange={this.onChange} placeholder="Enter password" />
-                                <div style={{ color: 'red' }}>{this.state.err_repassword}</div>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label className="control-label" htmlFor="email">Firstname:</label>
-                            <div>
-                                <input type="text" className="form-control" id="email" name="firstname_register" value={this.state.firstname_register} onChange={this.onChange} placeholder="Enter email" />
-                                <div style={{ color: 'red' }}>{this.state.err_firstname}</div>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label className="control-label" htmlFor="email">Lastname:</label>
-                            <div>
-                                <input type="text" className="form-control" id="email" name="lastname_register" value={this.state.lastname_register} onChange={this.onChange} placeholder="Enter email" />
-                                <div style={{ color: 'red' }}>{this.state.err_lastname}</div>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label className="control-label" htmlFor="email">Email:</label>
-                            <div>
-                                <input type="text" className="form-control" id="email" name="email" value={this.state.email} onChange={this.onChange} placeholder="Enter email" />
-                                <div style={{ color: 'red' }}>{this.state.err_email}</div>
-                            </div>
-                        </div>
-                        <div className="form-group1">
-                            <div className="">
-                                <button type="submit" loading={this.state.iconLoading} className="btn btn-default" >Submit</button>
-                            </div>
-                        </div>
-                        <p style={{ color: 'red' }}>{this.state.loading}</p>
-                    </form>
+                    <FormAddCustomer Register={this.Register} />
                 </Drawer>
                 <Drawer
                     title="Update user"
@@ -307,6 +188,13 @@ class TableData extends Component {
                             <label className="control-label" htmlFor="email">ID:</label>
                             <div>
                                 <input type="text" className="form-control" id="email" readOnly name="id_update" value={this.state.id_update} onChange={this.onChange} placeholder="Enter email" />
+                            </div>
+                        </div>
+                        <div className="form-group">
+                            <label className="control-label" htmlFor="email">Username:</label>
+                            <div>
+                                <input type="text" className="form-control" id="username" name="username_update" value={this.state.username_update} onChange={this.onChange} placeholder="Enter email" />
+                                <div style={{ color: 'red' }}>{this.state.err_username_update}</div>
                             </div>
                         </div>
                         <div className="form-group">
