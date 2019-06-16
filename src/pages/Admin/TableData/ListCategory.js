@@ -14,7 +14,9 @@ class ListCategory extends Component {
             openFormUpdate: false,
             id_update: '',
             name_update: '',
-            visible: false
+            visible: false,
+            id_delete:'',
+            loading: ''
         }
     }
 
@@ -46,10 +48,16 @@ class ListCategory extends Component {
     addCategory = (values) => {
         const token = localStorage.getItem("token")
         console.log(token)
+        this.setState({
+            loading: 'Vui lòng đợi...'
+        })
         apiCall('catalogy/add', 'PUT', {
             pizzaCategory: values.name,
         }, { 'Authorization': "Bearer " + token }).then(res => {
             //console.log(res)
+            this.setState({
+                loading: ''
+            })
             var { categorys } = this.state;
             //console.log(customers)
             categorys.push(values)
@@ -75,16 +83,9 @@ class ListCategory extends Component {
         })
     }
     showModal = () => {
-        this.setState({
-          visible: true,
-        });
+       
       };
-    handleOk = e => {
-        //console.log(e);
-        this.setState({
-            visible: false,
-        });
-    };
+   
 
     handleCancel = e => {
         // console.log(e);
@@ -113,7 +114,7 @@ class ListCategory extends Component {
 
     onClose = () => {
         this.setState({
-            openFormUpdate: false
+            openFormAddCatelogy: false
         })
     }
     onChange = (e) => {
@@ -157,13 +158,23 @@ class ListCategory extends Component {
         })
     }
     showFormDelete = (text) => {
-        alert(text)
+        //alert(text)
+        this.setState({
+            visible: true,
+        });
+        this.setState({
+            id_delete: text
+        })
+       
+    }
+    handleOk = e => {
+        //console.log(e);
         const token = localStorage.getItem("token")
         // console.log(token)
-        apiCall(`catalogy/delete/${text}`, 'PUT', {
+        apiCall(`catalogy/delete/${this.state.id_delete}`, 'PUT', {
         }, { 'Authorization': "Bearer " + token }).then(res => {
             var { categorys } = this.state;
-            categorys.splice(text);
+            categorys.splice(this.state.id_delete);
             this.setState({
                 categorys: categorys
             })
@@ -175,7 +186,10 @@ class ListCategory extends Component {
             })
 
         })
-    }
+        this.setState({
+            visible: false,
+        });
+    };
     componentDidMount() {
         //console.log('a')
         this.props.load();
@@ -200,12 +214,16 @@ class ListCategory extends Component {
                                 <td>{category.id}</td>
                                 <td>{category.pizzaCategory}</td>
                                 <td>
+                                    <span style={{marginLeft:'5px'}}>
                                     <Button onClick={() => { this.showFormEdit(category.id) }}>
                                         <Icon type="edit" />
                                     </Button>
-                                    <Button onClick={() => { this.showModal(category.id) }}>
+                                    </span>
+                                    <span style={{marginLeft:'5px'}}>
+                                    <Button onClick={() => { this.showFormDelete(category.id) }}>
                                         <Icon type="delete" />
                                     </Button>
+                                    </span>
                                 </td>
                             </tr>
                         )
@@ -213,14 +231,14 @@ class ListCategory extends Component {
                     </tbody>
                 </table>
                 <Drawer
-                    title="Add new user"
+                    title="Thêm loại sản phẩm"
                     placement="right"
                     closable={false}
                     onClose={this.onClose}
                     visible={this.state.openFormAddCatelogy}
                     width={350}
                 >
-                    <FormAddCategory addCategory={this.addCategory} />
+                    <FormAddCategory addCategory={this.addCategory}  loading={this.state.loading} />
                 </Drawer>
                 <Drawer
                     title="Sửa loại sản phẩm"
@@ -250,14 +268,12 @@ class ListCategory extends Component {
                     </form>
                 </Drawer>
                 <Modal
-                    title="Basic Modal"
+                    title="Xóa loại sản phẩm"
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                 >
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
+                    <span style={{color: 'green', textAlign: 'center'}}>Bạn có chắc chắn xóa loại sản phẩm này?</span>
                 </Modal>
             </div>
         );

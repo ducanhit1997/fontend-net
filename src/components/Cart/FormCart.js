@@ -55,6 +55,7 @@ class FormCart extends Component {
                 message: 'Bạn đã đặt hàng thành công'
             });
             localStorage.removeItem("CART")
+            window.location.reload();
         })
     }
    

@@ -54,13 +54,13 @@ class Admin extends Component {
                             <Icon type="user" />
                             <span>Quản lý khách hàng</span>
                         </Menu.Item>
-                        <Menu.Item key="product">
-                            <Icon type="video-camera" />
-                            <span>Quản lý sản phẩm</span>
-                        </Menu.Item>
                         <Menu.Item key="category">
                             <Icon type="upload" />
                             <span>Quản lý loại sản phẩm</span>
+                        </Menu.Item>
+                        <Menu.Item key="product">
+                            <Icon type="video-camera" />
+                            <span>Quản lý sản phẩm</span>
                         </Menu.Item>
                     </Menu>
                 </Sider>
@@ -76,24 +76,21 @@ class Admin extends Component {
                                 (this.state.showCustomer) ?
                                     <Breadcrumb style={{ margin: '0px 0px 0px 15px' }}>
                                         <Breadcrumb.Item>Home</Breadcrumb.Item>
-                                        <Breadcrumb.Item>Management</Breadcrumb.Item>
-                                        <Breadcrumb.Item>Customer</Breadcrumb.Item>
-                                    </Breadcrumb> : <div></div>
-                            }
-                            {
-                                (this.state.showProduct) ?
-                                    <Breadcrumb style={{ margin: '0px 0px 0px 15px' }}>
-                                        <Breadcrumb.Item>Home</Breadcrumb.Item>
-                                        <Breadcrumb.Item>Management</Breadcrumb.Item>
-                                        <Breadcrumb.Item>Product</Breadcrumb.Item>
+                                        <Breadcrumb.Item>Quản lý khách hàng</Breadcrumb.Item>
                                     </Breadcrumb> : <div></div>
                             }
                             {
                                 (this.state.showCategory) ?
                                     <Breadcrumb style={{ margin: '0px 0px 0px 15px' }}>
                                         <Breadcrumb.Item>Home</Breadcrumb.Item>
-                                        <Breadcrumb.Item>Management</Breadcrumb.Item>
-                                        <Breadcrumb.Item>Product</Breadcrumb.Item>
+                                        <Breadcrumb.Item>Quản lý loại sản phẩm</Breadcrumb.Item>
+                                    </Breadcrumb> : <div></div>
+                            }
+                            {
+                                (this.state.showProduct) ?
+                                    <Breadcrumb style={{ margin: '0px 0px 0px 15px' }}>
+                                        <Breadcrumb.Item>Home</Breadcrumb.Item>
+                                        <Breadcrumb.Item>Quản lý sản phẩm</Breadcrumb.Item>
                                     </Breadcrumb> : <div></div>
                             }
                         </div>

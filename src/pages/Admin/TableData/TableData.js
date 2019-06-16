@@ -11,7 +11,8 @@ class TableData extends Component {
         openFormUpdate: false,
         openFormAddUser: false,
         isUpdate: false,
-        customers: []
+        customers: [],
+        loading: ''
     };
 
     showFormAddUser = () => {
@@ -38,6 +39,9 @@ class TableData extends Component {
     };
 
     Register = (values) => {
+        this.setState({
+            loading: 'Vui lòng đợi...'
+        })
         apiCall('users/register', 'POST', {
             username: values.username,
             password: values.password,
@@ -45,60 +49,25 @@ class TableData extends Component {
             firstName: values.firstName,
             lastName: values.lastName,
         }).then(res => {
+            this.setState({
+                loading: ''
+            })
             var { customers } = this.state;
-            console.log(customers)
+            //console.log(customers)
             customers.push(values)
             this.setState({ isRegister: true });
             if (this.state.isRegister) {
-                message.success('Add user suscessfully!', 1);
+                message.success('Thêm khách hàng thành công!', 1);
                 this.setState({ visible: false })
             }
         })
     }
-    // Update = (e) => {
-    //     var { firstname_update, lastname_update, email_update, id_update } = this.state;
-    //     var error = true;
-    //     if (firstname_update === '') {
-    //         this.setState({ err_firstname_update: " Firstname can't be empty!" })
-    //         error = false;
-    //     } else {
-    //         this.setState({ err_firstname_update: '' })
-    //     }
-    //     if (lastname_update === '') {
-    //         this.setState({ err_lastname_update: "Lastname can't be empty!" })
-    //         error = false;
-    //     } else {
-    //         this.setState({ err_lastname_update: '' })
-    //     }
-    //     if (email_update === '') {
-    //         this.setState({ err_email_update: "Email can't be empty!" })
-    //         error = false;
-    //     } else {
-    //         this.setState({ err_email_update: '' })
-    //     }
-    //     if (error) {
-    //         var token = 'Bearer ' + localStorage.getItem('token');
-    //         console.log(token);
-    //         this.setState({ loading: 'Please wait.......' });
-    //         apiCall('users/edit', 'POST', token, {
-    //             id: id_update,
-    //             firstName: firstname_update,
-    //             lastName: lastname_update,
-    //             email: email_update
-    //         }).then(res2 => {
-    //             console.log(res2);
-    //             this.setState({ isUpdate: true });
-    //             if (this.state.isUpdate) {
-    //                 message.success('Update user suscessfully!', 1);
-    //             }
-    //         })
-    //     }
-    // }
+   
     componentDidMount() {
         this.props.loadCustomer();
     }
     showFormEdit = (text) => {
-        alert(text);
+        //alert(text);
         this.props.findCustomer(text)
         this.setState({
             openFormUpdate: true,
@@ -138,7 +107,7 @@ class TableData extends Component {
         return (
             <div>
                 <div className="col-sm-12 col-md-12 col-xs-12" style={{ borderColor: '1px solid red', marginTop: '0px' }}>
-                    <Button onClick={this.showFormAddUser} type="primary" style={{ margin: '0px 0px 5px 0px' }}><Icon type="plus" />Add new user</Button>
+                    <Button onClick={this.showFormAddUser} type="primary" style={{ margin: '0px 0px 5px 0px' }}><Icon type="plus" />Thêm khách hàng</Button>
                     <table className="table">
                         <thead>
                             <tr>
@@ -171,14 +140,14 @@ class TableData extends Component {
 
                 </div>
                 <Drawer
-                    title="Add new user"
+                    title="Thêm khách hàng"
                     placement="right"
                     closable={false}
                     onClose={this.onClose}
                     visible={this.state.openFormAddUser}
                     width={350}
                 >
-                    <FormAddCustomer Register={this.Register} />
+                    <FormAddCustomer Register={this.Register} loading={this.state.loading} />
                 </Drawer>
                 <Drawer
                     title="Thông tin khách hàng"
@@ -198,7 +167,7 @@ class TableData extends Component {
                         <div className="form-group">
                             <label className="control-label" htmlFor="email">Username:</label>
                             <div>
-                                <input type="text" className="form-control" id="username"  name="username_update" value={this.state.username_update} onChange={this.onChange} placeholder="Enter email" />
+                                <input type="text" className="form-control" id="username"   readOnly name="username_update" value={this.state.username_update} onChange={this.onChange} placeholder="Enter email" />
                             </div>
                         </div>
                         <div className="form-group">

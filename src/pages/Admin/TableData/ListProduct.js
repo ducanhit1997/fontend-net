@@ -57,9 +57,16 @@ class ListProduct extends Component {
                                 <td>{this.formatNumber(product.description)} VNĐ</td>
                                 <td>{this.showNameCategory(product.pizzaCategory)}</td>
                                 <td>
+                                <span style={{marginLeft:'5px'}}>
                                     <Button>
-                                        <Icon type="edit" title="Update customer" />
+                                        <Icon type="edit" />
                                     </Button>
+                                    </span>
+                                    <span style={{marginLeft:'5px'}}>
+                                    <Button>
+                                        <Icon type="delete" />
+                                    </Button>
+                                    </span>
                                 </td>
                             </tr>
                         )

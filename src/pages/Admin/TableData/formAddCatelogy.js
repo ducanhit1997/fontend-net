@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import apiCall from '../../../utils/apiCall';
 import { Form, Icon, Input, Button } from 'antd';
+import FormItem from 'antd/lib/form/FormItem';
 
 class formAddCatelogy extends Component {
     handleSubmit = e => {
@@ -15,6 +16,7 @@ class formAddCatelogy extends Component {
    
     render() {
         const { getFieldDecorator } = this.props.form;
+        const {loading} = this.props;
         return (
             <div>
                 <Form onSubmit={this.handleSubmit} className="login-form">
@@ -35,6 +37,9 @@ class formAddCatelogy extends Component {
                             Thêm
                                     </Button>
                     </Form.Item>
+                    <FormItem>
+                        <p style={{color:'red', fontWeight:'bold', marginLeft:'10px'}}>{loading}</p>
+                    </FormItem>
                 </Form>
             </div>
         );
