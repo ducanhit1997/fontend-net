@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import image1 from './images/ok.jpg'
 import image2 from './images/pizza.jpg'
 import ListProduct from './../../components/ListProduct/ListProduct';
+import CustomerChat from 'react-customer-chat'
+
 // import { FacebookProvider, SendToMessenger } from 'react-facebook';
 
 class HomePage extends Component {
@@ -62,6 +64,9 @@ class HomePage extends Component {
                     </a>
                 </div>
                 <ListProduct data={data} addProductToCard={this.addProductToCard} />
+                <CustomerChat
+                    pageId={1992738150809030}
+                />
             </div>
         );
     }

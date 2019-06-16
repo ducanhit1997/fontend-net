@@ -38,7 +38,7 @@ export const act_LoadProductByCategory = (data) =>{
 export const act_LoadPage_Request = (page) =>{
     return(dispatch) =>{
         return apiCall(`products/page/${page}`,'GET',null).then(res =>{
-            console.log(res.data);
+            //console.log(res.data);
             dispatch(act_LoadPage(res.data));
         })
     }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Icon, Drawer, Button, message } from 'antd';
 import { act_LoadProduct_Request } from '../../../redux/product/action';
-class category extends Component {
+class ListProduct extends Component {
     state = {
         products: []
     }
@@ -85,4 +85,4 @@ const mapDispatchToProps = (dispatch, props) => {
         }
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(category);    
+export default connect(mapStateToProps, mapDispatchToProps)(ListProduct);    

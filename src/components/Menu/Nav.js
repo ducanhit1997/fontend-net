@@ -39,6 +39,7 @@ class Nav extends Component {
             const acc = res.data;
             console.log(acc)
             //this.setState({profile: acc});
+            const id = acc.user_id;
             const token = acc.token;
             const firstName = acc.firstName;
             const lastName = acc.lastName;
@@ -48,6 +49,7 @@ class Nav extends Component {
             //console.log(role);
 
             const name = lastName + " " + firstName;
+            localStorage.setItem("id",id);
             localStorage.setItem("name", name);
             localStorage.setItem("firstName", firstName);
             localStorage.setItem("lastName", lastName);
@@ -71,7 +73,6 @@ class Nav extends Component {
                     }
                 }
                 this.setState({ showFormLogin: false })
-                window.location.reload();
             }
         }).catch(e => {
             this.setState({ loading: 'Sai thông tin đăng nhập!!' });
@@ -124,7 +125,7 @@ class Nav extends Component {
             notification.success({
                 message: 'Bạn đã đăng xuất thành công'
             });
-            window.location.reload();
+            
         }
         if (e.key === 'profile') {
             this.setState({

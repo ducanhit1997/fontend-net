@@ -55,50 +55,50 @@ class TableData extends Component {
             }
         })
     }
-    Update = (e) => {
-        var { firstname_update, lastname_update, email_update, id_update } = this.state;
-        var error = true;
-        if (firstname_update === '') {
-            this.setState({ err_firstname_update: " Firstname can't be empty!" })
-            error = false;
-        } else {
-            this.setState({ err_firstname_update: '' })
-        }
-        if (lastname_update === '') {
-            this.setState({ err_lastname_update: "Lastname can't be empty!" })
-            error = false;
-        } else {
-            this.setState({ err_lastname_update: '' })
-        }
-        if (email_update === '') {
-            this.setState({ err_email_update: "Email can't be empty!" })
-            error = false;
-        } else {
-            this.setState({ err_email_update: '' })
-        }
-        if (error) {
-            var token = 'Bearer ' + localStorage.getItem('token');
-            console.log(token);
-            this.setState({ loading: 'Please wait.......' });
-            apiCall('users/edit', 'POST', token, {
-                id: id_update,
-                firstName: firstname_update,
-                lastName: lastname_update,
-                email: email_update
-            }).then(res2 => {
-                console.log(res2);
-                this.setState({ isUpdate: true });
-                if (this.state.isUpdate) {
-                    message.success('Update user suscessfully!', 1);
-                }
-            })
-        }
-    }
+    // Update = (e) => {
+    //     var { firstname_update, lastname_update, email_update, id_update } = this.state;
+    //     var error = true;
+    //     if (firstname_update === '') {
+    //         this.setState({ err_firstname_update: " Firstname can't be empty!" })
+    //         error = false;
+    //     } else {
+    //         this.setState({ err_firstname_update: '' })
+    //     }
+    //     if (lastname_update === '') {
+    //         this.setState({ err_lastname_update: "Lastname can't be empty!" })
+    //         error = false;
+    //     } else {
+    //         this.setState({ err_lastname_update: '' })
+    //     }
+    //     if (email_update === '') {
+    //         this.setState({ err_email_update: "Email can't be empty!" })
+    //         error = false;
+    //     } else {
+    //         this.setState({ err_email_update: '' })
+    //     }
+    //     if (error) {
+    //         var token = 'Bearer ' + localStorage.getItem('token');
+    //         console.log(token);
+    //         this.setState({ loading: 'Please wait.......' });
+    //         apiCall('users/edit', 'POST', token, {
+    //             id: id_update,
+    //             firstName: firstname_update,
+    //             lastName: lastname_update,
+    //             email: email_update
+    //         }).then(res2 => {
+    //             console.log(res2);
+    //             this.setState({ isUpdate: true });
+    //             if (this.state.isUpdate) {
+    //                 message.success('Update user suscessfully!', 1);
+    //             }
+    //         })
+    //     }
+    // }
     componentDidMount() {
         this.props.loadCustomer();
     }
     showFormEdit = (text) => {
-        //alert(text);
+        alert(text);
         this.props.findCustomer(text)
         this.setState({
             openFormUpdate: true,
@@ -129,6 +129,11 @@ class TableData extends Component {
         });
         //console.log(this.state);
     }
+    closeForm =()=>{
+        this.setState({
+            openFormUpdate: false
+        })
+    }
     render() {
         return (
             <div>
@@ -155,7 +160,7 @@ class TableData extends Component {
                                     <td>{customer.username}</td>
                                     <td>
                                         <Button onClick={() => { this.showFormEdit(customer.user_id) }}>
-                                            <Icon type="edit" title="Update customer" />
+                                            <Icon type="info-circle" />
                                         </Button>
                                     </td>
                                 </tr>
@@ -176,14 +181,14 @@ class TableData extends Component {
                     <FormAddCustomer Register={this.Register} />
                 </Drawer>
                 <Drawer
-                    title="Update user"
+                    title="Thông tin khách hàng"
                     placement="right"
                     closable={false}
                     onClose={this.onClose}
                     visible={this.state.openFormUpdate}
                     width={300}
                 >
-                    <form className="form-horizontal" onSubmit={this.Update}>
+                    <form className="form-horizontal">
                         <div className="form-group">
                             <label className="control-label" htmlFor="email">ID:</label>
                             <div>
@@ -193,37 +198,27 @@ class TableData extends Component {
                         <div className="form-group">
                             <label className="control-label" htmlFor="email">Username:</label>
                             <div>
-                                <input type="text" className="form-control" id="username" name="username_update" value={this.state.username_update} onChange={this.onChange} placeholder="Enter email" />
-                                <div style={{ color: 'red' }}>{this.state.err_username_update}</div>
+                                <input type="text" className="form-control" id="username"  name="username_update" value={this.state.username_update} onChange={this.onChange} placeholder="Enter email" />
                             </div>
                         </div>
                         <div className="form-group">
                             <label className="control-label" htmlFor="email">Firstname:</label>
                             <div>
-                                <input type="text" className="form-control" id="email" name="firstname_update" value={this.state.firstname_update} onChange={this.onChange} placeholder="Enter email" />
-                                <div style={{ color: 'red' }}>{this.state.err_firstname_update}</div>
+                                <input type="text" className="form-control" id="email" readOnly name="firstname_update" value={this.state.firstname_update} onChange={this.onChange} placeholder="Enter email" />
                             </div>
                         </div>
                         <div className="form-group">
                             <label className="control-label" htmlFor="email">Lastname:</label>
                             <div>
-                                <input type="text" className="form-control" id="email" name="lastname_update" value={this.state.lastname_update} onChange={this.onChange} placeholder="Enter email" />
-                                <div style={{ color: 'red' }}>{this.state.err_lastname_update}</div>
+                                <input type="text" className="form-control" id="email" readOnly name="lastname_update" value={this.state.lastname_update} onChange={this.onChange} placeholder="Enter email" />
                             </div>
                         </div>
                         <div className="form-group">
                             <label className="control-label" htmlFor="email">Email:</label>
                             <div>
-                                <input type="text" className="form-control" id="email" name="email_update" value={this.state.email_update} onChange={this.onChange} placeholder="Enter email" />
-                                <div style={{ color: 'red' }}>{this.state.err_email_update}</div>
+                                <input type="text" className="form-control" id="email" readOnly name="email_update" value={this.state.email_update} onChange={this.onChange} placeholder="Enter email" />
                             </div>
                         </div>
-                        <div className="form-group1">
-                            <div className="">
-                                <button type="submit" loading={this.state.iconLoading} className="btn btn-default" ><Icon type="edit" />Update</button>
-                            </div>
-                        </div>
-                        <p style={{ color: 'red' }}>{this.state.loading}</p>
                     </form>
                 </Drawer>
             </div>

@@ -18,9 +18,6 @@ class LoginForm extends Component {
         const { loading } = this.props
         const { getFieldDecorator } = this.props.form;
         return (
-            // <div className="login__form--wrapper" style={{
-            //     backgroundImage: `url(${bg_form_login})`
-            // }}>
             <Row>
                 <Col md={6}> </Col>
                 <Col md={12} className="form_login--wrapper">
@@ -76,8 +73,6 @@ class LoginForm extends Component {
                 </Col>
                 <Col md={6}> </Col>
             </Row>
-
-            //</div>
         )
     }
 }

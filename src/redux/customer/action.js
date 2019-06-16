@@ -19,7 +19,7 @@ export const act_LoadCustomer = (data) =>{
 export const act_FindCustomer_Request = (idCustomer) =>{
     return(dispatch) =>{
         return apiCall(`users/get/${idCustomer}`,'GET',null).then(res =>{
-            //console.log(res.data);
+            console.log(res.data);
             dispatch(act_FindCustomer(res.data));
         })
     }

@@ -7,8 +7,6 @@ const CUSTOMER = (state = list_CUSTOMER, action) => {
         case Types.DELETE_CUSTOMER:
             return action.data;
         case Types.UPDATE_CUSTOMER:
-            return action.data;
-        case Types.UPDATE_CUSTOMER:
             return action.data;            
         default: return state;
     }

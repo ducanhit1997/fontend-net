@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Icon, InputNumber, Button } from 'antd';
-
+import FormCart from './FormCart'
+var data = JSON.parse(localStorage.getItem('CART'));
+console.log(data)
 class Cart extends Component {
     constructor(props) {
         super(props);
@@ -14,13 +16,13 @@ class Cart extends Component {
         let dataAfterUpdate = []
         var total = 0;
         update.map((val) => {
-            let objetTmp = { ...val, money: parseInt(val.item.description + "") }
-            objetTmp.item.money = parseInt(val.item.description)
+            let objetTmp = { ...val, money: parseInt(val.item.description) }
+            objetTmp.item.money = parseInt(val.item.description)*objetTmp.quanlity
             total += objetTmp.item.money;
             dataAfterUpdate.push(objetTmp)
-            //localStorage.setItem('CART', JSON.stringify(dataAfterUpdate));
         })
         this.setState({ data: dataAfterUpdate, sum: total })
+        localStorage.setItem("SUM", JSON.stringify(total));
     }
 
     onChange = (value, id) => {
@@ -31,45 +33,46 @@ class Cart extends Component {
         update.map((val) => {
             let objetTmp = { ...val, money: parseInt(val.item.description + "") }
             if (objetTmp.item.id === id) {
+                objetTmp.quanlity=value;
                 objetTmp.item.money = parseInt(value) * parseInt(val.item.description)
             }
             total += objetTmp.item.money;
             dataAfterUpdate.push(objetTmp)
+            localStorage.setItem('CART', JSON.stringify(dataAfterUpdate));
+            
             //localStorage.setItem('CART', JSON.stringify(dataAfterUpdate));
         })
         this.setState({ data: dataAfterUpdate, sum: total })
+        localStorage.setItem("SUM", JSON.stringify(total));
 
         //console.log("date update", dataAfterUpdate)
     }
     showMessDelete = (ind) => {
-        alert(ind)
-        // let update = this.state.data
-        // let dataAfterUpdate = []
-        // var total = 0;
-        // update.map((val) => {
-        //     let objetTmp = {...val, money: parseInt(val.item.description + "") }
-        //     if (objetTmp.item.id === id) {
-        //         update.splice(id+1);
-        //     }
-        //     total += objetTmp.item.money;
-        //     dataAfterUpdate.push(objetTmp)
-        //     //localStorage.setItem('CART', JSON.stringify(dataAfterUpdate));
-        // })
-        // this.setState({ data: dataAfterUpdate, sum: total })
+        //alert(ind)
+        let update = this.state.data
+        var {data} = this.state;
+         data.splice(ind,1);
+        //console.log(data)
+        let dataAfterUpdate = []
+        var total = 0;
+        update.map((val) => {
+            let objetTmp = { ...val, money: parseInt(val.item.description + "") }
+            total += objetTmp.item.money;
+            dataAfterUpdate.push(objetTmp)
+            localStorage.setItem('CART', JSON.stringify(dataAfterUpdate));
+            //localStorage.setItem('CART', JSON.stringify(dataAfterUpdate));
+        })
+        this.setState({
+            data: data, 
+            sum: total
+        })
+        localStorage.setItem("SUM", JSON.stringify(total));
     }
     formatNumber = (num) => {
         return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
     }
     render() {
         var { data } = this.state;
-        console.log(data)
-        //const count = data.length
-        var price = 0;
-        //var countProduct =1;
-        data.map(item => {
-            price = parseInt(item.item.description) * 2
-            console.log(price)
-        })
         return (
             <div className="container">
                 <div className="row">
@@ -92,7 +95,7 @@ class Cart extends Component {
                                         <tr>
                                             {/* //<th>{item.item.description} * {item.item.quanlity}</th> */}
                                             <th scope="row">{item.item.name}</th>
-                                            <th scope="row"><InputNumber min={1} max={10} defaultValue={1} onChange={(val) => this.onChange(val, item.item.id)} /></th>
+                                            <th scope="row"><InputNumber min={1} max={10} defaultValue={item.quanlity} onChange={(val) => this.onChange(val, item.item.id)} /></th>
                                             <th scope="row"><img src={item.item.image} style={{ width: '50px', height: '50px' }}></img></th>
                                             <th scope="row">{this.formatNumber(item.item.description)} VND</th>
                                             <th scope="row">{this.formatNumber(item.item.money)} VND</th>
@@ -111,10 +114,10 @@ class Cart extends Component {
                             <p style={{float:'right', fontWeight:'bold'}}>Tổng: {this.formatNumber(this.state.sum)} VND</p>
                         </div>
                     </div>
-                    {/* <div className="col-sm-4">
+                    <div className="col-sm-4">
+                        <FormCart data={data}/>
                         
-                        <p>Tổng giá: {this.formatNumber(this.state.sum)} VND</p>
-                    </div> */}
+                    </div>
                 </div>
             </div>
         );

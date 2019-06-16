@@ -5,14 +5,7 @@ import { Card, Button, notification, Popover } from 'antd';
 import './style.css';
 const { Meta } = Card;
 
-const content = (product) => {
-    return (
-        <div>
-            {product.name}
-        </div>
 
-    )
-}
 class Product extends Component {
     constructor(props) {
         super(props)
@@ -42,8 +35,6 @@ class Product extends Component {
                     {this.props.products.map(product =>
                         <div>
                             <div className="col-sm-6 col-md-3 col-xs-12" style={{ borderColor: '1px solid red', marginTop: '7px' }}>
-                                <Popover content={content(product)}
-                                    title="Title">
                                     <Card
                                         hoverable
                                         style={{ width: 278 }}
@@ -53,7 +44,6 @@ class Product extends Component {
 
                                         <div style={{ textAlign: 'center', marginTop: '10px' }}><Button type="primary" onClick={() => this.addToCart(product)}>Thêm vào giỏ hàng</Button></div>
                                     </Card>
-                                </Popover>
                             </div>
                         </div>
                     )}

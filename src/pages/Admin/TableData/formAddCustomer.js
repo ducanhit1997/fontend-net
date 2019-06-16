@@ -34,6 +34,20 @@ class formAddCustomer extends Component {
             }
         })
     }
+    checkUsernameExist = (rule, value, callback) => {
+        //alert(value)
+        const form = this.props.form;
+        apiCall('users/check-username', 'POST', {
+            username: value
+        }).then(res => {
+            console.log(res.data)
+            if (value && res.data === 'Username already') {
+                callback('Username đã tồn tại trong hệ thôngs');
+            } else {
+                callback();
+            }
+        })
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
@@ -41,7 +55,9 @@ class formAddCustomer extends Component {
                 <Form onSubmit={this.handleSubmit} className="login-form">
                     <Form.Item>
                         {getFieldDecorator('username', {
-                            rules: [{ required: true, message: 'Vui lòng nhập username!' }
+                            rules: [
+                                { required: true, message: 'Vui lòng nhập username!' },
+                                { validator: this.checkUsernameExist }
                             ],
                         })(
                             <Input

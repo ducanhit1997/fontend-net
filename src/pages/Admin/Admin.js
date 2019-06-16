@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import TableData from './TableData/TableData';
-import Category from './TableData/category'
+import ListProduct from './TableData/ListProduct'
+import ListCategory from './TableData/ListCategory'
 import './style.css';
 const { Header, Sider, Content } = Layout;
 class Admin extends Component {
     state = {
         collapsed: false,
         showCustomer: true,
-        showProduct: false
+        showProduct: false,
+        showCategory: false
     };
 
     toggle = () => {
@@ -23,13 +25,22 @@ class Admin extends Component {
         if (e.key === 'product') {
             this.setState({
                 showCustomer: false,
-                showProduct: true
+                showProduct: true,
+                showCategory: false
             })
         }
         if (e.key === 'user') {
             this.setState({
                 showCustomer: true,
-                showProduct: false
+                showProduct: false,
+                showCategory: false
+            })
+        }
+        if (e.key === 'category') {
+            this.setState({
+                showCustomer: false,
+                showProduct: false,
+                showCategory: true
             })
         }
     }
@@ -67,12 +78,23 @@ class Admin extends Component {
                                         <Breadcrumb.Item>Home</Breadcrumb.Item>
                                         <Breadcrumb.Item>Management</Breadcrumb.Item>
                                         <Breadcrumb.Item>Customer</Breadcrumb.Item>
-                                    </Breadcrumb> :
+                                    </Breadcrumb> : <div></div>
+                            }
+                            {
+                                (this.state.showProduct) ?
                                     <Breadcrumb style={{ margin: '0px 0px 0px 15px' }}>
                                         <Breadcrumb.Item>Home</Breadcrumb.Item>
                                         <Breadcrumb.Item>Management</Breadcrumb.Item>
                                         <Breadcrumb.Item>Product</Breadcrumb.Item>
-                                    </Breadcrumb>
+                                    </Breadcrumb> : <div></div>
+                            }
+                            {
+                                (this.state.showCategory) ?
+                                    <Breadcrumb style={{ margin: '0px 0px 0px 15px' }}>
+                                        <Breadcrumb.Item>Home</Breadcrumb.Item>
+                                        <Breadcrumb.Item>Management</Breadcrumb.Item>
+                                        <Breadcrumb.Item>Product</Breadcrumb.Item>
+                                    </Breadcrumb> : <div></div>
                             }
                         </div>
                     </Header>
@@ -85,8 +107,15 @@ class Admin extends Component {
                         }}
                     >   {
                             (this.state.showCustomer) ?
-                                <TableData /> :
-                                <Category />
+                                <TableData /> : <div></div>
+                        }
+                        {
+                            (this.state.showCategory) ?
+                                <ListCategory /> : <div></div>
+                        }
+                        {
+                            (this.state.showProduct) ?
+                                <ListProduct /> : <div></div>
                         }
                     </Content>
                 </Layout>
